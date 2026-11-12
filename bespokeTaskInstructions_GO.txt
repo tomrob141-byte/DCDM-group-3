@@ -1,0 +1,60 @@
+In the future the collaborator intends to knockout the genes mentioned in the file ‘bespokeTask_GO.txt’ but is unsure if the genes are currently in your database.  Regardless of the potential overlap the collaborator requires some extra information on the gene ontology associations of these genes for future use.  Unfortunately, the collaborator is unsure of all the column titles but best suggestions below and the format may or may not be correct. Ensure all this data and its relevant relationships are incorporated in the database, however, if there is a valid reason all the data cannot be incorporated please state this in your report.  Note, mouse is the reference species and its columns are Gene stable ID and Gene name.   The database structure must be present for future use.
+
+For this task you are welcome to go get more relevant information if time and your capacity permits but this is optional.  The data was retrieved from here:  https://ftp.ebi.ac.uk/pub/databases/GO/goa/proteomes/59.M_musculus.goa
+
+The columns:
+
+Column
+Name
+Description
+1
+DB
+Source database, e.g. UniProtKB
+2
+DB Object ID
+Protein accession, e.g. P12345
+3
+DB Object Symbol
+Gene symbol, e.g. Sox2
+4
+Relation / Qualifier
+Relationship to the GO term, e.g. enables, involved_in, NOT
+5
+GO ID
+Gene Ontology identifier, e.g. GO:0005634
+6
+DB:Reference
+Supporting reference, e.g. PMID:12345678
+7
+Evidence Code
+Evidence supporting the annotation, e.g. IDA, IEA, IMP
+8
+With/From
+Additional evidence or supporting identifier
+9
+Aspect
+GO category: P, F, or C
+10
+DB Object Name
+Full protein or gene product name
+11
+DB Object Synonym
+Alternative names or symbols
+12
+DB Object Type
+Entity type, usually protein
+13
+Taxon
+Organism taxonomy ID, e.g. taxon:10090
+14
+Date
+Annotation date, YYYYMMDD
+15
+Assigned By
+Organisation or database assigning the annotation
+16
+Annotation Extension
+Additional biological context
+17
+Gene Product Form ID
+Specific protein isoform or modified form
