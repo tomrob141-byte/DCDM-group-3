@@ -16,7 +16,7 @@ library(tidyverse)
 Setting up path
 
 ```{r}
-#getwd
+getwd()
 #setwd("enterpathhere")
 ```
 
@@ -109,6 +109,14 @@ disease <- read_tsv("Disease_information.txt",
                     col_names = c("human_symbol","human_name","hgnc_id",
                                   "do_term","do_id","mouse_genotypes",
                                   "mouse_symbol","mgi_id"))
+bespoke <- read_tsv("../bespokeTask_GO.txt",
+                    skip = 1,
+                    col_names = c("DB","DB_obj_id","DB_obj_symbol","Relation",
+                    "GO_id","DB_reference","evidence_code","with_from",
+                    "aspect","DB_obj_name", "DB_obj_synonym", "DB_obj_type",
+                    "taxon","date","assigned_by","annotation_exp",
+                    "Gene_product_formid"))
+
 ```
 
 Checking the dimension of all our imported data.\
@@ -119,6 +127,7 @@ dim(data)
 dim(parameter)
 dim(procedure)
 dim(disease)
+dim(bespoke)
 ```
 
 Joining data
@@ -160,12 +169,12 @@ precleaned_data <- data
 precleaned_parameter <- parameter
 precleaned_procedure <- procedure
 precleaned_disease <- disease
+precleaned_bespoke <- bespoke
 
 save(precleaned_data, join_param, join_disease, join_all, 
-     precleaned_disease, precleaned_procedure, precleaned_parameter, file = "precleaned.RData")
+     precleaned_disease, precleaned_procedure, precleaned_parameter,
+     precleaned_bespoke, file = "precleaned.RData")
 
-getwd()
-write.csv(precleaned_data, "precleaned_analysis.csv")
 ```
 
 View data
@@ -175,6 +184,7 @@ View(precleaned_data)
 View(precleaned_parameter)
 View(precleaned_procedure)
 View(precleaned_disease)
+View(precleaned_bespoke)
 View(join_param)
 View(join_disease)
 View(join_all)

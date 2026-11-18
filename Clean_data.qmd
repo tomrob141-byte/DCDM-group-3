@@ -30,7 +30,7 @@ Data cleaning for disease
 Importing env
 
 ```{r}
-load("./../precleaned.RData")
+load("./precleaned.RData")
 ```
 
 Assign variable conventions
@@ -40,6 +40,7 @@ data <- precleaned_data
 parameter <- precleaned_parameter
 procedure <- precleeaned_procedure
 disease <- precleaned_disease
+bespoke <- precleaned_bespoke
 ```
 
 ## Data Cleaning -Main Data
