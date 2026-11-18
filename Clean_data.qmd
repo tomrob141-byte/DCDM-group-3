@@ -1,0 +1,170 @@
+---
+title: "Clean_data"
+format: html
+editor: visual
+---
+
+## Cleaning data
+
+This is a continuation from importing data.\
+\
+***Variable naming convention used are :***\
+data : main dataframe\
+parameter : IMPC parameter data frame\
+procedure : IMPC procedure data frame\
+disease : Disease information data frame
+
+***Steps***
+
+Main data cleaning :\
+1. correct any eronous data format on each data column\
+2. correct appropriate duplicates\
+3. visualize missing data\
+4. handle missing data\
+5. change column classes and save cleaned files
+
+Data cleaning for parameter\
+Data cleaning for procedure\
+Data cleaning for disease
+
+Importing env
+
+```{r}
+load("./../precleaned.RData")
+```
+
+Assign variable conventions
+
+```{r}
+data <- precleaned_data
+parameter <- precleaned_parameter
+procedure <- precleeaned_procedure
+disease <- precleaned_disease
+```
+
+## Data Cleaning -Main Data
+
+### 1. Correct eronous data format
+
+*refer to SOP for expected values or data format*
+
+analysis_id (Ying qi)
+
+```{r}
+#there should be no typos in analysis_id
+```
+
+gene_accession_id (Musa)
+
+```{r}
+
+```
+
+gene_symbol (Ying qi)
+
+```{r}
+
+```
+
+strain_name (Rexel)
+
+```{r}
+
+```
+
+mouse_life_stage (Tom)
+
+```{r}
+
+```
+
+parameter_id (Musa)
+
+```{r}
+
+```
+
+parameter_name (Ying qi)
+
+```{r}
+
+```
+
+pvalue (Rexel)
+
+```{r}
+
+```
+
+allele_symbol (musa)
+
+```{r}
+
+```
+
+lacz\_ (tom)
+
+```{r}
+
+```
+
+### 2. Correct appropriate duplicates
+
+I tried to analyse if analysis_id is unique and find that there is duplicated files that ends with \_1.csv. I will adjust and do additional cross checking after we have corrected all typos
+
+***dont run this code yet***
+
+```{r}
+##analysis_id
+#check for duplicates
+dim(data)
+sum(duplicated(data$analysis_id))
+
+dup_id <- data[data$analysis_id %in% data$analysis_id[duplicated(data$analysis_id)],]
+dim(dup_id)
+View(dup_id)
+
+#id duplicates seems to come from files that ends with _1.csv
+#check the number of _1.csv files
+sum(grepl("_1.csv$", data$file)) #69 
+sum(is.na(data$analysis_id)) #2
+#this confirms that id duplicates comes from duplicated file and 2 NAs
+
+#remove duplicates except the NAs
+data <- data %>%
+  filter(is.na(analysis_id) | !duplicated(analysis_id))
+dim(data) 
+#27655 - 27586 = 71
+#removes 69 "_1.csv" duplicates
+# + retain 2 rows with NAs for further analysis
+```
+
+### 3. Visualize missing data
+
+### 4. Handle missing data
+
+### 5. Change column classes and save cleaned files
+
+## Data Cleaning - Parameter (Tom)
+
+```{r}
+View(parameter)
+```
+
+## Data Cleaning - Procedure (Yingqi)
+
+```{r}
+View(procedure)
+```
+
+## Data Cleaning - Disease (Rex)
+
+```{r}
+View(disease)
+```
+
+## Data Cleaning - Bespoke (Tom)
+
+```{r}
+
+```

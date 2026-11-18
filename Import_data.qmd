@@ -1,0 +1,181 @@
+---
+title: "Data_Cleaning"
+format: html
+editor: visual
+---
+
+## Importing data
+
+Required packages\
+(please move any added package along the code here)
+
+```{r}
+library(tidyverse)
+```
+
+Setting up path
+
+```{r}
+#getwd
+#setwd("enterpathhere")
+```
+
+Importing multiple csv files
+
+1.  the variable "files" is a vector containing filenames from group3_data folder
+2.  read_onefile is a function for reading one csv file
+    - col_names assign the dataframe column names to be "key" and "value". The datafile have no header, without this, R will assign first row to be column name
+
+    - show_col_types = FALSE mutes the notification after running the read_csv commands. This is useful as will be iteratring on multiple files
+
+    - pivot wider
+
+    - mutate(file = basename(f)) is adding a new column containing the filename
+
+    - relocate move the file column to the frist column of our dataframe
+3.  map_dfr(x, y) runs the function y to vector x and put each output as new rows
+
+```{r}
+files <- list.files("./group3_data/", pattern ="\\.csv$", full.names = TRUE)
+
+read_onefile <- function(f) {
+  read_csv(f, col_names = c("key","value"),
+           show_col_types = FALSE) %>% 
+    pivot_wider(names_from = key, values_from =value) %>% 
+    mutate(file = basename(f)) %>% 
+    relocate(file, .before = 1)
+}
+
+dat <- map_dfr(files, read_onefile)
+data <- dat
+```
+
+Inspecting and correcting erronous column name\
+- Note the typoed column gene_Acccesion_id, heart, kidney, and pvalue\
+- We will first display rows with erronous error and impute them
+
+```{r}
+#gene_accession_id
+data %>%
+  filter(!is.na(gene_Accession_id)) %>% 
+  select(gene_accession_id, gene_Accession_id) 
+
+data <- data %>%
+  mutate(gene_accession_id = coalesce(gene_accession_id, gene_Accession_id)) %>%
+  select(-gene_Accession_id)
+
+#lacz_heart
+data %>% 
+  filter(!is.na(heart)) %>% 
+  select(lacz_heart, heart)
+
+data <- data %>%
+  mutate(lacz_heart = coalesce(lacz_heart, heart)) %>%
+  select(-heart)
+
+#lacz_kidney
+data %>% 
+  filter(!is.na(kidney)) %>% 
+  select(lacz_kidney, kidney)
+
+data <- data %>%
+  mutate(lacz_kidney = coalesce(lacz_kidney, kidney)) %>%
+  select(-kidney)
+
+#p_value
+data %>% 
+  filter(!is.na(pvalue)) %>% 
+  select(p_value, pvalue)
+
+data <- data %>%
+  mutate(p_value = coalesce(p_value, pvalue)) %>%
+  select(-pvalue)
+```
+
+Imputing other txt files
+
+1.  trim_ws removes spaces from the beginning and end of each value
+2.  rename changes column name. Since both parameter and procedure have col name called names and description, we change them as not to confuse each other
+3.  comment = "\#" ignore all comments from the file. In disease information there are brief comments
+4.  col_names. Since the col_names have no header, we assign our own colnames
+
+```{r}
+parameter <- read_csv("IMPC_parameter_description.txt", trim_ws = TRUE) %>%  
+  rename(param_name = name, param_description = description)
+procedure <- read_csv("IMPC_procedure.txt", trim_ws = TRUE) %>%  
+  rename(proc_name = name, proc_desc = description)
+disease <- read_tsv("Disease_information.txt",
+                    comment = "#",
+                    col_names = c("human_symbol","human_name","hgnc_id",
+                                  "do_term","do_id","mouse_genotypes",
+                                  "mouse_symbol","mgi_id"))
+```
+
+Checking the dimension of all our imported data.\
+Notice all our data have different dimension, there will be many to many relationship
+
+```{r}
+dim(data)
+dim(parameter)
+dim(procedure)
+dim(disease)
+```
+
+Joining data
+
+1.  join main data to parameter by paramater id
+2.  join main data to procedure by imcParameterOrigId
+3.  join main data to disease by gene_accession_id
+
+join_param : data + paramater + procedure\
+join_disease : data + disease\
+join_all : data + parameter + procedure + disease
+
+Notice the warning that many rows are duplicated since they have multiple match in the other table. So I assume we should not join these tables, but its nice to help make sense of the data
+
+```{r}
+join_param <- data %>% 
+  left_join(parameter, by = c("parameter_stable_id" = "parameterId")) %>% 
+  left_join(procedure, by = "impcParameterOrigId")
+
+#assign variable containing all column name from disease table
+disease_cols <- setdiff(names(disease), "mgi_id")
+
+join_disease <- data %>% 
+  left_join(disease, by = c("gene_accession_id" = "mgi_id")) %>% 
+  relocate(all_of(disease_cols), .after = 4)
+
+
+join_all <- data %>% 
+  left_join(parameter, by = c("parameter_stable_id" = "parameterId")) %>% 
+  left_join(procedure, by = "impcParameterOrigId") %>% 
+  left_join(disease, by = c("gene_accession_id" = "mgi_id")) %>% 
+  relocate(all_of(disease_cols), .after = 4)
+```
+
+Export Data as R.data
+
+```{r}
+precleaned_data <- data
+precleaned_parameter <- parameter
+precleaned_procedure <- procedure
+precleaned_disease <- disease
+
+save(precleaned_data, join_param, join_disease, join_all, 
+     precleaned_disease, precleaned_procedure, precleaned_parameter, file = "precleaned.RData")
+
+getwd()
+write.csv(precleaned_data, "precleaned_analysis.csv")
+```
+
+View data
+
+```{r}
+View(precleaned_data)
+View(precleaned_parameter)
+View(precleaned_procedure)
+View(precleaned_disease)
+View(join_param)
+View(join_disease)
+View(join_all)
+```
