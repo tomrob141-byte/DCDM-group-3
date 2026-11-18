@@ -38,7 +38,7 @@ Assign variable conventions
 ```{r}
 data <- precleaned_data
 parameter <- precleaned_parameter
-procedure <- precleeaned_procedure
+procedure <- precleaned_procedure
 disease <- precleaned_disease
 bespoke <- precleaned_bespoke
 ```
