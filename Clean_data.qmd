@@ -89,11 +89,11 @@ table(data$strain_name, useNA = "ifany")
 ```
 
 mouse_life_stage (Tom)
-
+-445 errors corrected in life stages
 ```{r}
 correct_names <- c("E9.5", "E12.5", "E15.5", "E18.5", "Early adult", "Middle
  aged adult", "Late adult")
-unique_values <- unique(precleaned_data$mouse_life_stage)
+unique_values <- unique(data$mouse_life_stage)
 
 suggested_corrections <- data.frame(
   original = unique_values,
@@ -103,8 +103,8 @@ suggested_corrections <- data.frame(
 )
 print(suggested_corrections)
 
-precleaned_data$mouse_life_stage <- correct_names[
-  amatch(precleaned_data$mouse_life_stage,
+data$mouse_life_stage <- correct_names[
+  amatch(data$mouse_life_stage,
          correct_names,
          maxDist = 3)
 ]
@@ -151,9 +151,38 @@ allele_symbol (musa)
 ```
 
 lacz\_ (tom)
-
+663 typos corrected in lacz_blood
+504 in brain
+575 in colon
+588 in eye
+908 in heart
+604 in kidney
+640 in liver
+600 in lung
+941 in skeletal muscle
+595 in skin
+953 in vascular system
 ```{r}
+correct_vals <- c("expression", "NA", "no expression", "tissue not available")
+# Didn't set the loop here, just change the lacz_* below to the one you want to check
+unique_vals <- unique(data$lacz_vascular_system)
+suggested_corrections <- data.frame(
+  original = unique_vals,
+  suggested = correct_vals[
+    amatch(unique_vals, correct_vals, maxDist = 3)
+  ]
+)
+print(suggested_corrections)
+lacz <- c("lacz_blood", "lacz_brain", "lacz_colon", "lacz_eye", "lacz_heart", "lacz_kidney", "lacz_liver", 
+          "lacz_lung", "lacz_skeletal_muscle", "lacz_skin", "lacz_vascular_system")
 
+for (col in lacz){
+  data[[col]] <- correct_vals[
+    amatch(data[[col]],
+           correct_vals,
+           maxDist = 3)
+  ]
+}
 ```
 
 ### 2. Correct appropriate duplicates
