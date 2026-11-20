@@ -75,6 +75,8 @@ gene_symbol (Ying qi)
 
 strain_name (Rexel)
 
+- No error found
+
 ```{r}
 #checking unexpected values 
 allowed <- c("B6Brd;B6Dnk;B6N-Tyr<c-Brd>", "C57BL/6Brd-Tyr<c-Brd>", "C57BL/6Dnk", "C57BL/6JTyr;C57BL/6N", "C57BL/6N", "C57BL/6NCrl", "C57BL/6NJ", "C57BL/6NTac", "C57BL/6NTacDen")
@@ -89,7 +91,8 @@ table(data$strain_name, useNA = "ifany")
 mouse_life_stage (Tom)
 
 ```{r}
-correct_names <- c("E9.5", "E12.5", "E15.5", "E18.5", "Early adult", "Middle aged adult", "Late adult")
+correct_names <- c("E9.5", "E12.5", "E15.5", "E18.5", "Early adult", "Middle
+ aged adult", "Late adult")
 unique_values <- unique(precleaned_data$mouse_life_stage)
 
 suggested_corrections <- data.frame(
@@ -120,6 +123,8 @@ parameter_name (Ying qi)
 ```
 
 p_value (Rexel)
+
+- 1 row has value 1.1. Changed to NA
 
 ```{r}
 #convert to number

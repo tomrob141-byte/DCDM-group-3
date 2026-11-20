@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-## Analyzed data
+## Analyze data
 
 This is a continuation from cleaning data.
 
@@ -14,8 +14,7 @@ This is a continuation from cleaning data.
 
 2.  Other preanalyzed data transformations
 
-3.  Data Viz 1
-    *They want the ability to select a particular knockout mouse and visualise the statistical scores of all phenotypes tested. The plot should intuitively show the phenotypes that are significantly affected by the gene knockout.*
+3.  Data Viz 1 *They want the ability to select a particular knockout mouse and visualise the statistical scores of all phenotypes tested. The plot should intuitively show the phenotypes that are significantly affected by the gene knockout.*
 
 4.  Data Viz 2
 
@@ -37,7 +36,7 @@ Importing csv/env
 
 ```
 
-### 1. Multiple Testing Correction for p values 
+### 1. Multiple Testing Correction for p values
 
 ```{r}
 
