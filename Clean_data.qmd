@@ -125,6 +125,7 @@ parameter_name (Ying qi)
 p_value (Rexel)
 
 - 1 row has value 1.1. Changed to NA
+- Many pvalue is 0. Assume its because its so small, need to floor it before log transformation later
 
 ```{r}
 #convert to number
