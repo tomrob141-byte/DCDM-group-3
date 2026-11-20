@@ -56,9 +56,94 @@ bespoke <- precleaned_bespoke
 *refer to SOP for expected values or data format*
 
 analysis_id (Ying qi)
-
+Found 2 missing analysis_id values and no format or filename mismatches. Duplicate entries were retained for later review.
 ```{r}
 #there should be no typos in analysis_id
+sum(is.na(data$analysis_id))
+sum(duplicated(data$analysis_id[!is.na(data$analysis_id)]))
+data %>%
+  filter(is.na(analysis_id)) %>%
+  select(file, analysis_id)
+
+data %>%
+  filter(!is.na(analysis_id)) %>%
+  add_count(analysis_id, name = "n") %>%
+  filter(n > 1) %>%
+  select(file, analysis_id, n) %>%
+  arrange(analysis_id, file) %>%
+  View()
+
+dup_rows <- data %>%
+  filter(!is.na(analysis_id)) %>%
+  add_count(analysis_id, name = "n") %>%
+  filter(n > 1)
+
+sum(duplicated(dup_rows %>% select(-file, -n)))
+
+
+duplicate_status <- dup_rows %>%
+  group_by(analysis_id) %>%
+  summarise(
+    different_records = nrow(distinct(pick(-file, -n))),
+    files = paste(file, collapse = ", "),
+    .groups = "drop"
+  ) %>%
+  filter(different_records > 1)
+
+View(duplicate_status)
+
+different_values <- dup_rows %>%
+  select(-n) %>%
+  pivot_longer(
+    cols = -c(file, analysis_id),
+    names_to = "column",
+    values_to = "value"
+  ) %>%
+  group_by(analysis_id, column) %>%
+  filter(n_distinct(value) > 1) %>%
+  ungroup() %>%
+  arrange(analysis_id, column, file)
+
+View(different_values)
+
+
+library(stringr)
+
+analysis_id_format_check <- data %>%
+  filter(!is.na(analysis_id)) %>%
+  mutate(
+    id_trim = str_trim(analysis_id),
+    format_ok = str_detect(id_trim, "^an[0-9]+$")
+  ) %>%
+  filter(analysis_id != id_trim | !format_ok) %>%
+  select(file, analysis_id, id_trim, format_ok) %>%
+  distinct()
+
+analysis_id_format_check %>% count(format_ok)
+View(analysis_id_format_check)
+
+
+library(stringr)
+library(dplyr)
+
+analysis_id_spelling_check <- data %>%
+  filter(!is.na(analysis_id)) %>%
+  mutate(
+    id_from_file = stringr::str_remove(
+      file, "(_[0-9]+)?\\.csv$"
+    ),
+    spelling_check = case_when(
+      analysis_id == id_from_file ~ "match",
+      tolower(analysis_id) == tolower(id_from_file) ~ "case_difference",
+      TRUE ~ "does_not_match_file"
+    )
+  ) %>%
+  filter(spelling_check != "match") %>%
+  select(file, analysis_id, id_from_file, spelling_check) %>%
+  distinct()
+
+analysis_id_spelling_check %>% count(spelling_check)
+View(analysis_id_spelling_check)
 ```
 
 gene_accession_id (Musa)
@@ -68,9 +153,30 @@ gene_accession_id (Musa)
 ```
 
 gene_symbol (Ying qi)
-
+Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
 ```{r}
+library(dplyr)
 
+if (!"gene_symbol_original" %in% names(data)) {
+  data$gene_symbol_original <- data$gene_symbol
+}
+
+data <- data %>%
+  mutate(
+    gene_symbol = case_when(
+      gene_accession_id == "MGI:1346867" ~ "Map2k2",
+      gene_accession_id == "MGI:1918492" ~ "Spata24",
+      gene_accession_id == "MGI:95791"   ~ "Got1",
+      TRUE ~ gene_symbol
+    )
+  )
+
+data %>%
+  filter(gene_accession_id %in%
+           c("MGI:1346867", "MGI:1918492", "MGI:95791")) %>%
+  distinct(gene_accession_id, gene_symbol_original, gene_symbol)
+write.csv(data, "gene_symbol_corrected.csv", row.names = FALSE, na = "")
+save(data, file = "gene_symbol_corrected.RData")
 ```
 
 strain_name (Rexel)
@@ -117,9 +223,64 @@ parameter_id (Musa)
 ```
 
 parameter_name (Ying qi)
-
+All 18,150 parameter names with matching reference IDs were exact matches. The other 9,505 records had no reference ID and could not be checked. No differences were found, and no names were changed.
 ```{r}
+library(dplyr)
 
+parameter_lookup <- parameter %>%
+  distinct(parameterId, param_name) %>%
+  group_by(parameterId) %>%
+  filter(n_distinct(param_name) == 1) %>%
+  ungroup() %>%
+  distinct(parameterId, .keep_all = TRUE)
+
+parameter_name_check <- data %>%
+  left_join(
+    parameter_lookup,
+    by = c("parameter_stable_id" = "parameterId")
+  ) %>%
+  mutate(
+    name_check = case_when(
+      is.na(param_name) ~ "no_reference",
+      is.na(parameter_name) ~ "missing_in_data",
+      parameter_name == param_name ~ "match",
+      TRUE ~ "mismatch"
+    )
+  )
+
+parameter_name_check %>%
+  count(name_check)
+
+parameter_name_check %>%
+  filter(name_check != "match") %>%
+  select(file, parameter_stable_id, parameter_name, param_name, name_check) %>%
+  distinct() %>%
+  View()
+
+
+
+parameter_name_check <- parameter_name_check %>%
+  mutate(
+    name_check_detail = case_when(
+      is.na(param_name) ~ "no_reference",
+      is.na(parameter_name) ~ "missing_in_data",
+      parameter_name == param_name ~ "exact_match",
+      tolower(trimws(parameter_name)) ==
+        tolower(trimws(param_name)) ~ "case_or_outer_space_difference",
+      TRUE ~ "other_difference"
+    )
+  )
+
+parameter_name_check %>%
+  count(name_check_detail)
+
+parameter_name_check %>%
+  filter(name_check_detail %in%
+           c("case_or_outer_space_difference", "other_difference")) %>%
+  select(file, parameter_stable_id, parameter_name, param_name,
+         name_check_detail) %>%
+  distinct() %>%
+  View()
 ```
 
 p_value (Rexel)
@@ -230,9 +391,18 @@ View(parameter)
 ```
 
 ## Data Cleaning - Procedure (Yingqi)
-
+Checked for missing proc_desc values, exact duplicate rows, and inconsistent capitalisation in proc_name. Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
 ```{r}
-View(procedure)
+procedure_case_check <- procedure %>%
+  filter(!is.na(proc_name), trimws(proc_name) != "") %>%
+  mutate(name_lower = tolower(trimws(proc_name))) %>%
+  group_by(name_lower) %>%
+  filter(n_distinct(trimws(proc_name)) > 1) %>%
+  ungroup() %>%
+  select(proc_name, proc_desc, impcParameterOrigId) %>%
+  distinct()
+
+View(procedure_case_check)
 ```
 
 ## Data Cleaning - Disease (Rex)
