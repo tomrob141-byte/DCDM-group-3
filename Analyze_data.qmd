@@ -1,0 +1,70 @@
+---
+title: "Analyze_data"
+format: html
+editor: visual
+---
+
+## Analyzed data
+
+This is a continuation from cleaning data.
+
+**Steps**
+
+1.  Multiple correction for p values
+
+2.  Other preanalyzed data transformations
+
+3.  Data Viz 1
+    *They want the ability to select a particular knockout mouse and visualise the statistical scores of all phenotypes tested. The plot should intuitively show the phenotypes that are significantly affected by the gene knockout.*
+
+4.  Data Viz 2
+
+    *The collaborator also wishes to visualise the statistical scores of all knockout mice for a selected phenotype.*
+
+5.  Data Viz 3
+
+    *They would like to visualize clusters of genes with similar phenotype scores*
+
+Loading packages
+
+```{r}
+
+```
+
+Importing csv/env
+
+```{r}
+
+```
+
+### 1. Multiple Testing Correction for p values 
+
+```{r}
+
+```
+
+### 2. Other preanalyzed data transformations
+
+*Optional : in case we need to do more data transformations*
+
+```{r}
+
+```
+
+### 3. Data Viz 1
+
+```{r}
+
+```
+
+### 4. Data Viz 2
+
+```{r}
+
+```
+
+### 5. Data Viz 3
+
+```{r}
+
+```
