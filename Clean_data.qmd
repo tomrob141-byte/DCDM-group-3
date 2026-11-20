@@ -27,6 +27,12 @@ Data cleaning for parameter\
 Data cleaning for procedure\
 Data cleaning for disease
 
+Loading Packages
+
+```{r}
+library(tidyverse)
+```
+
 Importing env
 
 ```{r}
@@ -70,6 +76,13 @@ gene_symbol (Ying qi)
 strain_name (Rexel)
 
 ```{r}
+#checking unexpected values 
+allowed <- c("B6Brd;B6Dnk;B6N-Tyr<c-Brd>", "C57BL/6Brd-Tyr<c-Brd>", "C57BL/6Dnk", "C57BL/6JTyr;C57BL/6N", "C57BL/6N", "C57BL/6NCrl", "C57BL/6NJ", "C57BL/6NTac", "C57BL/6NTacDen")
+
+unique(data$strain_name[!data$strain_name %in% allowed])
+unique(data$strain_name[data$strain_name %in% allowed])
+table(data$strain_name, useNA = "ifany")
+#no unexpected values
 
 ```
 
@@ -91,10 +104,24 @@ parameter_name (Ying qi)
 
 ```
 
-pvalue (Rexel)
+p_value (Rexel)
 
 ```{r}
+#convert to number
+data$p_value <- as.numeric(data$p_value)
 
+#checking unexpected value 
+pvalue_check <- data %>% 
+  filter(p_value <=0 | p_value >1 | is.na(p_value))
+View(pvalue_check)
+
+unique(pvalue_check$p_value) #spotted eronous p value of 1.1
+which(data$p_value == 1.1) 
+#convert pvalue of 1.1 to NA 
+data$p_value[data$p_value == 1.1] <-  NA
+
+#there are many p value with 0, possibly due to rounding errors
+#we need to floor them later when doing analysis
 ```
 
 allele_symbol (musa)
