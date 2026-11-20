@@ -36,7 +36,7 @@ Importing csv/env
 
 ```
 
-### 1. Multiple Testing Correction and Log transformation for p values 
+### 1. Multiple Testing Correction and Log transformation for p values
 
 ```{r}
 

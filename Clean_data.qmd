@@ -89,7 +89,9 @@ table(data$strain_name, useNA = "ifany")
 ```
 
 mouse_life_stage (Tom)
--445 errors corrected in life stages
+
+- 445 errors corrected in life stages
+
 ```{r}
 correct_names <- c("E9.5", "E12.5", "E15.5", "E18.5", "Early adult", "Middle
  aged adult", "Late adult")
@@ -152,17 +154,9 @@ allele_symbol (musa)
 ```
 
 lacz\_ (tom)
-663 typos corrected in lacz_blood
-504 in brain
-575 in colon
-588 in eye
-908 in heart
-604 in kidney
-640 in liver
-600 in lung
-941 in skeletal muscle
-595 in skin
-953 in vascular system
+
+- 663 typos corrected in lacz_blood, 504 in brain, 575 in colon, 588 in eye, 908 in heart. 604 in kidney, 640 in liver, 600 in lung, 941 in skeletal muscle, 595 in skin, 953 in vascular system.
+
 ```{r}
 correct_vals <- c("expression", "NA", "no expression", "tissue not available")
 # Didn't set the loop here, just change the lacz_* below to the one you want to check
