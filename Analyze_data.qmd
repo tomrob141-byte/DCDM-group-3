@@ -10,7 +10,7 @@ This is a continuation from cleaning data.
 
 **Steps**
 
-1.  Multiple correction for p values
+1.  Mutiple testing correction and log transformation for p values
 
 2.  Other preanalyzed data transformations
 
@@ -36,7 +36,7 @@ Importing csv/env
 
 ```
 
-### 1. Multiple Testing Correction for p values
+### 1. Multiple Testing Correction and Log transformation for p values
 
 ```{r}
 
