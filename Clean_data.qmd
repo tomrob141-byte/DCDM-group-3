@@ -379,9 +379,28 @@ dim(data)
 ### 5. Change column classes and save cleaned files
 
 ## Data Cleaning - Parameter (Tom)
-
+parameters grouped from IMPC website for the testing they are related to. Repeats removed.
+ref_paramater_groups.csv needed(in repo), contains all groups for reference.
+Some parameters are in twice but with different impcParameterOrigId so these have been retained for now.
 ```{r}
 View(parameter)
+# code to group the parameters based on the IMPC protocols
+references <- read.csv("~/Desktop/Group3/ref_paramater_groups.csv", header = TRUE)
+precleaned_parameter$suffixes <- substr(precleaned_parameter$parameterId, 6, 8)
+view(precleaned_parameter)
+
+precleaned_parameter <- precleaned_parameter %>%
+ left_join(references, by = "suffixes")
+
+# handling repeats
+precleaned_parameter %>%
+  filter(duplicated(impcParameterOrigId))
+# repeat of GRS parameters found
+precleaned_parameter %>%
+  filter(duplicated(impcParameterOrigId))
+# removing repeats
+precleaned_parameter <- precleaned_parameter %>%
+  distinct(impcParameterOrigId, .keep_all = TRUE)
 ```
 
 ## Data Cleaning - Procedure (Yingqi)
@@ -408,5 +427,21 @@ View(disease)
 ## Data Cleaning - Bespoke (Tom)
 
 ```{r}
-
+unique(bespoke$DB)
+unique(bespoke$DB_obj_id)
+unique(bespoke$DB_obj_symbol)
+unique(bespoke$Relation)
+unique(bespoke$GO_id)
+unique(bespoke$DB_reference)
+unique(bespoke$evidence_code)
+unique(bespoke$with_from)
+unique(bespoke$aspect)
+unique(bespoke$DB_obj_name)
+unique(bespoke$DB_obj_synonym)
+unique(bespoke$DB_obj_type)
+unique(bespoke$taxon)
+unique(bespoke$date)
+unique(bespoke$assigned_by)
+unique(bespoke$annotation_exp)
+unique(bespoke$Gene_product_formid)
 ```
