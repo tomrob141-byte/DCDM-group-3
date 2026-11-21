@@ -31,6 +31,7 @@ Loading Packages
 
 ```{r}
 library(tidyverse)
+library(stringdist)
 ```
 
 Importing env
@@ -56,9 +57,10 @@ bespoke <- precleaned_bespoke
 *refer to SOP for expected values or data format*
 
 analysis_id (Ying qi)
-Found 2 missing analysis_id values and no format or filename mismatches. Duplicate entries were retained for later review.
+
+- Found 2 missing analysis_id values and no format or filename mismatches. Duplicate entries were retained for later review.
+
 ```{r}
-#there should be no typos in analysis_id
 sum(is.na(data$analysis_id))
 sum(duplicated(data$analysis_id[!is.na(data$analysis_id)]))
 data %>%
@@ -107,8 +109,6 @@ different_values <- dup_rows %>%
 View(different_values)
 
 
-library(stringr)
-
 analysis_id_format_check <- data %>%
   filter(!is.na(analysis_id)) %>%
   mutate(
@@ -122,9 +122,6 @@ analysis_id_format_check <- data %>%
 analysis_id_format_check %>% count(format_ok)
 View(analysis_id_format_check)
 
-
-library(stringr)
-library(dplyr)
 
 analysis_id_spelling_check <- data %>%
   filter(!is.na(analysis_id)) %>%
@@ -153,10 +150,10 @@ gene_accession_id (Musa)
 ```
 
 gene_symbol (Ying qi)
-Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
-```{r}
-library(dplyr)
 
+- Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
+
+```{r}
 if (!"gene_symbol_original" %in% names(data)) {
   data$gene_symbol_original <- data$gene_symbol
 }
@@ -175,8 +172,7 @@ data %>%
   filter(gene_accession_id %in%
            c("MGI:1346867", "MGI:1918492", "MGI:95791")) %>%
   distinct(gene_accession_id, gene_symbol_original, gene_symbol)
-write.csv(data, "gene_symbol_corrected.csv", row.names = FALSE, na = "")
-save(data, file = "gene_symbol_corrected.RData")
+
 ```
 
 strain_name (Rexel)
@@ -199,8 +195,7 @@ mouse_life_stage (Tom)
 - 445 errors corrected in life stages
 
 ```{r}
-correct_names <- c("E9.5", "E12.5", "E15.5", "E18.5", "Early adult", "Middle
- aged adult", "Late adult")
+correct_names <- c("E9.5", "E12.5", "E15.5", "E18.5", "Early adult", "Middle aged adult", "Late adult")
 unique_values <- unique(data$mouse_life_stage)
 
 suggested_corrections <- data.frame(
@@ -216,6 +211,11 @@ data$mouse_life_stage <- correct_names[
          correct_names,
          maxDist = 3)
 ]
+
+#checking if all values are within expected ones
+unique(data$mouse_life_stage[!data$mouse_life_stage %in% correct_names])
+unique(data$mouse_life_stage[data$mouse_life_stage %in% correct_names])
+table(data$mouse_life_stage, useNA = "ifany")
 ```
 
 parameter_id (Musa)
@@ -225,9 +225,10 @@ parameter_id (Musa)
 ```
 
 parameter_name (Ying qi)
-All 18,150 parameter names with matching reference IDs were exact matches. The other 9,505 records had no reference ID and could not be checked. No differences were found, and no names were changed.
+
+- All 18,150 parameter names with matching reference IDs were exact matches. The other 9,505 records had no reference ID and could not be checked. No differences were found, and no names were changed.
+
 ```{r}
-library(dplyr)
 
 parameter_lookup <- parameter %>%
   distinct(parameterId, param_name) %>%
@@ -288,7 +289,7 @@ parameter_name_check %>%
 p_value (Rexel)
 
 - 1 row has value 1.1. Changed to NA
-- Many pvalue is 0. Assume its because its so small, need to floor it before log transformation later
+- Many pvalue is 0. Assumed its a very small p_value, need to floor it before log transformation later
 
 ```{r}
 #convert to number
@@ -297,8 +298,6 @@ data$p_value <- as.numeric(data$p_value)
 #checking unexpected value 
 pvalue_check <- data %>% 
   filter(p_value <=0 | p_value >1 | is.na(p_value))
-View(pvalue_check)
-
 unique(pvalue_check$p_value) #spotted eronous p value of 1.1
 which(data$p_value == 1.1) 
 #convert pvalue of 1.1 to NA 
@@ -339,6 +338,13 @@ for (col in lacz){
            maxDist = 3)
   ]
 }
+
+#checking if all are within expected values 
+for (i in lacz) {
+  print(unique(data[[i]][!data[[i]] %in% correct_vals]))
+  print(unique(data[[i]][data[[i]] %in% correct_vals]))
+  print(table(data[[i]], useNA = "ifany"))
+}
 ```
 
 ### 2. Correct appropriate duplicates
@@ -354,8 +360,8 @@ dim(data)
 sum(duplicated(data$analysis_id))
 
 dup_id <- data[data$analysis_id %in% data$analysis_id[duplicated(data$analysis_id)],]
-dim(dup_id)
 View(dup_id)
+
 
 #id duplicates seems to come from files that ends with _1.csv
 #check the number of _1.csv files
@@ -385,7 +391,9 @@ View(parameter)
 ```
 
 ## Data Cleaning - Procedure (Yingqi)
-Checked for missing proc_desc values, exact duplicate rows, and inconsistent capitalisation in proc_name. Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
+
+- Checked for missing proc_desc values, exact duplicate rows, and inconsistent capitalisation in proc_name. Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
+
 ```{r}
 procedure_case_check <- procedure %>%
   filter(!is.na(proc_name), trimws(proc_name) != "") %>%
