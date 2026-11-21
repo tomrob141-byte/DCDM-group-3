@@ -16,16 +16,18 @@ disease : Disease information data frame
 
 ***Steps***
 
-Main data cleaning :\
+Data cleaning for main :\
 1. correct any eronous data format on each data column\
-2. correct appropriate duplicates\
-3. visualize missing data\
-4. handle missing data\
-5. change column classes and save cleaned files
+2. correct appropriate duplicates
 
 Data cleaning for parameter\
 Data cleaning for procedure\
 Data cleaning for disease
+
+\
+3. visualize missing data\
+4. handle missing data\
+5. change column classes and save cleaned files
 
 Loading Packages
 
@@ -58,89 +60,18 @@ bespoke <- precleaned_bespoke
 
 analysis_id (Ying qi)
 
-- Found 2 missing analysis_id values and no format or filename mismatches. Duplicate entries were retained for later review.
+- Found 2 missing analysis_id values and no format mismatches.
+- Duplicate values were retained for later cleaning (step 2)
 
 ```{r}
+#checking NAs and duplicates
 sum(is.na(data$analysis_id))
 sum(duplicated(data$analysis_id[!is.na(data$analysis_id)]))
-data %>%
-  filter(is.na(analysis_id)) %>%
-  select(file, analysis_id)
+#duplicates will be handled on step 2, after all typos and data format is cleaned
 
-data %>%
-  filter(!is.na(analysis_id)) %>%
-  add_count(analysis_id, name = "n") %>%
-  filter(n > 1) %>%
-  select(file, analysis_id, n) %>%
-  arrange(analysis_id, file) %>%
-  View()
-
-dup_rows <- data %>%
-  filter(!is.na(analysis_id)) %>%
-  add_count(analysis_id, name = "n") %>%
-  filter(n > 1)
-
-sum(duplicated(dup_rows %>% select(-file, -n)))
-
-
-duplicate_status <- dup_rows %>%
-  group_by(analysis_id) %>%
-  summarise(
-    different_records = nrow(distinct(pick(-file, -n))),
-    files = paste(file, collapse = ", "),
-    .groups = "drop"
-  ) %>%
-  filter(different_records > 1)
-
-View(duplicate_status)
-
-different_values <- dup_rows %>%
-  select(-n) %>%
-  pivot_longer(
-    cols = -c(file, analysis_id),
-    names_to = "column",
-    values_to = "value"
-  ) %>%
-  group_by(analysis_id, column) %>%
-  filter(n_distinct(value) > 1) %>%
-  ungroup() %>%
-  arrange(analysis_id, column, file)
-
-View(different_values)
-
-
-analysis_id_format_check <- data %>%
-  filter(!is.na(analysis_id)) %>%
-  mutate(
-    id_trim = str_trim(analysis_id),
-    format_ok = str_detect(id_trim, "^an[0-9]+$")
-  ) %>%
-  filter(analysis_id != id_trim | !format_ok) %>%
-  select(file, analysis_id, id_trim, format_ok) %>%
-  distinct()
-
-analysis_id_format_check %>% count(format_ok)
-View(analysis_id_format_check)
-
-
-analysis_id_spelling_check <- data %>%
-  filter(!is.na(analysis_id)) %>%
-  mutate(
-    id_from_file = stringr::str_remove(
-      file, "(_[0-9]+)?\\.csv$"
-    ),
-    spelling_check = case_when(
-      analysis_id == id_from_file ~ "match",
-      tolower(analysis_id) == tolower(id_from_file) ~ "case_difference",
-      TRUE ~ "does_not_match_file"
-    )
-  ) %>%
-  filter(spelling_check != "match") %>%
-  select(file, analysis_id, id_from_file, spelling_check) %>%
-  distinct()
-
-analysis_id_spelling_check %>% count(spelling_check)
-View(analysis_id_spelling_check)
+#checking if values follow notation of "an" + numbers: 
+all(grepl("^an[0-9]{10}$", data$analysis_id[!is.na(data$analysis_id)]))
+#TRUE, all values followed the convention, no cleaning needed
 ```
 
 gene_accession_id (Musa)
@@ -152,6 +83,8 @@ gene_accession_id (Musa)
 gene_symbol (Ying qi)
 
 - Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
+
+  **(there are stil many typos for other genes)**
 
 ```{r}
 if (!"gene_symbol_original" %in% names(data)) {
@@ -226,7 +159,7 @@ parameter_id (Musa)
 
 parameter_name (Ying qi)
 
-- All 18,150 parameter names with matching reference IDs were exact matches. The other 9,505 records had no reference ID and could not be checked. No differences were found, and no names were changed.
+- No significant cleaning needed to be done
 
 ```{r}
 
@@ -299,7 +232,6 @@ data$p_value <- as.numeric(data$p_value)
 pvalue_check <- data %>% 
   filter(p_value <=0 | p_value >1 | is.na(p_value))
 unique(pvalue_check$p_value) #spotted eronous p value of 1.1
-which(data$p_value == 1.1) 
 #convert pvalue of 1.1 to NA 
 data$p_value[data$p_value == 1.1] <-  NA
 
@@ -339,7 +271,7 @@ for (col in lacz){
   ]
 }
 
-#checking if all are within expected values 
+#checking if all lacz cols are within expected values 
 for (i in lacz) {
   print(unique(data[[i]][!data[[i]] %in% correct_vals]))
   print(unique(data[[i]][data[[i]] %in% correct_vals]))
@@ -354,9 +286,10 @@ I tried to analyse if analysis_id is unique and find that there is duplicated fi
 ***dont run this code yet***
 
 ```{r}
-##analysis_id
+#! eval : false
+
 #check for duplicates
-dim(data)
+sum(duplicated(data %>%  select(-file)))
 sum(duplicated(data$analysis_id))
 
 dup_id <- data[data$analysis_id %in% data$analysis_id[duplicated(data$analysis_id)],]
@@ -378,22 +311,16 @@ dim(data)
 # + retain 2 rows with NAs for further analysis
 ```
 
-### 3. Visualize missing data
-
-### 4. Handle missing data
-
-### 5. Change column classes and save cleaned files
-
 ## Data Cleaning - Parameter (Tom)
 
 parameters grouped from IMPC website for the testing they are related to. Repeats removed. ref_paramater_groups.csv needed(in repo), contains all groups for reference. Some parameters are in twice but with different impcParameterOrigId so these have been retained for now.
 
 ```{r}
-View(parameter)
 # code to group the parameters based on the IMPC protocols
-references <- read.csv("~/Desktop/Group3/ref_paramater_groups.csv", header = TRUE)
+# references <- read.csv("~/Desktop/Group3/ref_paramater_groups.csv", header = TRUE)
+
 precleaned_parameter$suffixes <- substr(precleaned_parameter$parameterId, 6, 8)
-view(precleaned_parameter)
+View(precleaned_parameter)
 
 precleaned_parameter <- precleaned_parameter %>%
  left_join(references, by = "suffixes")
@@ -407,30 +334,44 @@ precleaned_parameter %>%
 # removing repeats
 precleaned_parameter <- precleaned_parameter %>%
   distinct(impcParameterOrigId, .keep_all = TRUE)
+
+parameter <- precleaned_parameter
+
+#checking if there is any duplicated IMPC orig id left 
+sum(duplicated(parameter$impcParameterOrigId))
+sum(duplicated(parameter$parameterId))
+
+
+
 ```
 
 ## Data Cleaning - Procedure (Yingqi)
 
-- Checked for missing proc_desc values, exact duplicate rows, and inconsistent capitalisation in proc_name. Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
+- No exact duplicates, missing values Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
 
 ```{r}
-procedure_case_check <- procedure %>%
-  filter(!is.na(proc_name), trimws(proc_name) != "") %>%
-  mutate(name_lower = tolower(trimws(proc_name))) %>%
-  group_by(name_lower) %>%
-  filter(n_distinct(trimws(proc_name)) > 1) %>%
-  ungroup() %>%
-  select(proc_name, proc_desc, impcParameterOrigId) %>%
-  distinct()
+View(procedure)
 
-View(procedure_case_check)
+#Checking if there are duplication caused by  msisspeling or different case within the same group (ex histopathOlogy vs Histopathology)
+unique(procedure$proc_name) #all unique
+unique(procedure$proc_desc) #all unique
+
+unique(procedure$isMandatory) #no other values except TRUE or FALSE
+
+#checking if there are only numbers in paramater orig id
+all(grepl("[0-9]", procedure$impcParameterOrigId)) #TRUE
+#checking id there are duplicates in parameter orig id
+sum(duplicated(procedure$impcParameterOrigId)) #0
+
 ```
 
 ## Data Cleaning - Disease (Rex)
 
 ```{r}
-#Strings variables such as human_name, and do terms are briefly screened for any possible error 
+#Strings variables such as human_name, and do_term are briefly screened for any possible error 
 View(disease)
+unique(disease$human_name)
+unique(disease$do_term)
 #No error detected
 
 
@@ -457,23 +398,51 @@ all(grepl("^MGI:.*[0-9]+$", disease$mgi_id), na.rm = TRUE) #TRUE
 
 ## Data Cleaning - Bespoke (Tom)
 
+- change the column date into a Date format
+
 ```{r}
-View(bespoke)
-unique(bespoke$DB)
-unique(bespoke$DB_obj_id)
-unique(bespoke$DB_obj_symbol)
-unique(bespoke$Relation)
-unique(bespoke$GO_id)
-unique(bespoke$DB_reference)
-unique(bespoke$evidence_code)
-unique(bespoke$with_from)
-unique(bespoke$aspect)
-unique(bespoke$DB_obj_name)
-unique(bespoke$DB_obj_synonym)
-unique(bespoke$DB_obj_type)
-unique(bespoke$taxon)
-unique(bespoke$date)
-unique(bespoke$assigned_by)
-unique(bespoke$annotation_exp)
-unique(bespoke$Gene_product_formid)
+#Checking if there are special characters in DB obj id 
+all(grepl("[a-zA-Z0-9]", bespoke$DB_obj_id), na.rm = TRUE) #TRUE
+
+#Checking if there are special characters, and all gene start with uppercase
+all(grepl("^[A-Z][a-zA-Z0-9]*$", bespoke$DB_obj_symbol), na.rm = TRUE) #FALSE
+#there are some that had, checking
+unique(bespoke$DB_obj_symbol[!grepl("^[A-Z][a-zA-Z0-9]*$", bespoke$DB_obj_symbol)])
+#all special characters make sense, no cleaning needed
+
+#checking the notation
+all(grepl("^GO:[0-9]", bespoke$GO_id), na.rm = TRUE) #TRUE
+all(grepl("^GO_REF:[0-9]", bespoke$DB_reference), na.rm = TRUE) #TRUE
+
+#checking if there are special characters and all starts with uppercase
+all(grepl("^[A-Z][a-zA-z0-9]", bespoke$DB_obj_synonym), na.rm = TRUE)
+#there are some that has, checking 
+unique(bespoke$DB_obj_synonym[!grepl("^[A-Z][a-zA-Z0-9]*$", bespoke$DB_obj_synonym)])
+# all special characters make sense, no cleaning needed
+
+unique(bespoke$date) #all 20261009
+#change into date
+bespoke$date <- as.Date(
+  format(bespoke$date, scientific = FALSE, trim = TRUE),
+  format = "%Y%m%d"
+)
+
+
+unique(bespoke$DB) #all 1 value
+unique(bespoke$Relation) #no other value expcept located_in, enables, involved_in, and part_of
+unique(bespoke$DB_obj_type) #all protein
+unique(bespoke$taxon) #all taxon: 10090
+unique(bespoke$evidence_code) #all value is IEA
+unique(bespoke$with_from) #no misspelling
+unique(bespoke$aspect) #no other calues than C,F and P
+unique(bespoke$DB_obj_name) #brief scanning shows no error
+unique(bespoke$assigned_by) #no other value than UniProt and GOC
+unique(bespoke$annotation_exp) #all NAs
+unique(bespoke$Gene_product_formid) #all NAs
 ```
+
+### 3. Visualize missing data
+
+### 4. Handle missing data
+
+### 5. Change column classes and save cleaned files
