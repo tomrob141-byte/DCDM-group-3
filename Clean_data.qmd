@@ -385,9 +385,9 @@ dim(data)
 ### 5. Change column classes and save cleaned files
 
 ## Data Cleaning - Parameter (Tom)
-parameters grouped from IMPC website for the testing they are related to. Repeats removed.
-ref_paramater_groups.csv needed(in repo), contains all groups for reference.
-Some parameters are in twice but with different impcParameterOrigId so these have been retained for now.
+
+parameters grouped from IMPC website for the testing they are related to. Repeats removed. ref_paramater_groups.csv needed(in repo), contains all groups for reference. Some parameters are in twice but with different impcParameterOrigId so these have been retained for now.
+
 ```{r}
 View(parameter)
 # code to group the parameters based on the IMPC protocols
@@ -429,12 +429,36 @@ View(procedure_case_check)
 ## Data Cleaning - Disease (Rex)
 
 ```{r}
+#Strings variables such as human_name, and do terms are briefly screened for any possible error 
 View(disease)
+#No error detected
+
+
+#checking if human_symbol is uppercased and have no special character
+all(grepl("^[A-Z0-9]+$", disease$human_symbol), na.rm = TRUE) #FALSE
+#there are some that has, checking 
+unique(disease$human_symbol[grepl("[a-z]", disease$human_symbol)])
+unique(disease$human_symbol[grepl("[^A-Za-z0-9]", disease$human_symbol)])
+# all special characters and lowercase seems logical, no cleaning needed
+
+#checking if mouse_symbol first letter is uppercased and have no special characters
+all(grepl("^[A-Z][a-zA-Z0-9]*$", disease$mouse_symbol), na.rm = TRUE) #FALSE
+#there are some that had, checking
+unique(disease$mouse_symbol[!grepl("^[A-Z][a-zA-Z0-9]*$", disease$mouse_symbol)])
+#all special characters and lowercase seems logical, no cleaning needed
+
+#Checking if id columns follow their conventions
+all(grepl("^HGNC:.*[0-9]+$", disease$hgnc_id), na.rm = TRUE) #TRUE
+all(grepl("^DOID:.*[0-9]+$", disease$do_id), na.rm = TRUE) #TRUE
+all(grepl("^MGI:.*[0-9]+$", disease$mgi_id), na.rm = TRUE) #TRUE
+
+
 ```
 
 ## Data Cleaning - Bespoke (Tom)
 
 ```{r}
+View(bespoke)
 unique(bespoke$DB)
 unique(bespoke$DB_obj_id)
 unique(bespoke$DB_obj_symbol)
