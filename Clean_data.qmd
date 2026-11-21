@@ -313,11 +313,16 @@ dim(data)
 
 ## Data Cleaning - Parameter (Tom)
 
-parameters grouped from IMPC website for the testing they are related to. Repeats removed. ref_paramater_groups.csv needed(in repo), contains all groups for reference. Some parameters are in twice but with different impcParameterOrigId so these have been retained for now.
+- parameters grouped from IMPC website for the testing they are related to.
+
+  - ref_paramater_groups.csv needed is in repo, contains all groups for reference. Some parameters are in twice but with different impcParameterOrigId so these have been retained for now.
+
+-  duplicates from impcParameterOrigid removed.
 
 ```{r}
 # code to group the parameters based on the IMPC protocols
-# references <- read.csv("~/Desktop/Group3/ref_paramater_groups.csv", header = TRUE)
+references <- read.csv("./original/ref_paramater_groups.csv", header = TRUE)
+View(references)
 
 precleaned_parameter$suffixes <- substr(precleaned_parameter$parameterId, 6, 8)
 View(precleaned_parameter)
@@ -339,9 +344,6 @@ parameter <- precleaned_parameter
 
 #checking if there is any duplicated IMPC orig id left 
 sum(duplicated(parameter$impcParameterOrigId))
-sum(duplicated(parameter$parameterId))
-
-
 
 ```
 
