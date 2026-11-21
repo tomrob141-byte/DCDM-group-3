@@ -1,0 +1,52 @@
+﻿suffixes,group
+ABR,Auditory Brain Stem Response
+ACS,Acoustic Startle and Pre-pulse Inhibition (PPI)
+ALZ,Adult LacZ
+BLK,Tissue Embedding and Block Banking
+BWT,Body Weight
+CAL,Indirect Calorimetry
+CBC,Clinical Chemistry
+CHL,Challenge Whole Body Plethysmography
+CSD,Combined SHIRPA and Dysmorphology
+DXA,Body Composition (DEXA lean/fat)
+ECG,Electrocardiogram (ECG)
+ECH,Echo
+ELZ,Embryo LacZ
+EMA,MicroCT E18.5
+EML,MicroCT E9.5
+EMO,MicroCT E14.5-E15.5
+EOL,OPT E9.5
+EVL,Viability E9.5 Secondary Screen
+EVM,Viability E12.5 Secondary Screen
+EVO,Viability E14.5-E15.5 Secondary Screen
+EVP,Viability E18.5 Secondary Screen
+EXD,Experimental design
+EYE,Eye Morphology
+FEA,Fear Conditioning
+FER,Fertility of Homozygous Knock-out Mice
+FOR,Formalin Test
+GEL,Gross Morphology Embryo E9.5
+GEM,Gross Morphology Embryo E12.5
+GEO,Gross Morphology Embryo E14.5-E15.5
+GEP,Gross Morphology Embryo E18.5
+GPL,Gross Morphology Placenta E9.5
+GPM,Gross Morphology Placenta E12.5
+GPO,Gross Morphology Placenta E14.5-E15.5
+GPP,Gross Morphology Placenta E18.5
+GRS,Grip strength
+HEM,Hematology
+HIS,Histopathology
+HOU,Housing and Husbandry
+HWT,Heart Weight
+IMM,Immunophenotyping
+INS,Insulin Blood Level
+IPG,Intraperitoneal glucose tolerance test (IPGTT)
+LDT,Light-Dark Test
+MAA,MicroCT E14.5-E15.5 Analysis
+OFD,Open Field
+OWT,Organ Weight
+PAT,Gross Pathology and Tissue Collection
+VIA,Viability Primary Screen
+WEL,Welfare Observations
+XRY,X-ray
+YMZ,Y-maze
