@@ -54,14 +54,18 @@ bespoke <- precleaned_bespoke
 
 ## Data Cleaning -Main Data
 
-### 1. Correct eronous data format
+### 1. Correct erronous data format
 
 *refer to SOP for expected values or data format*
 
+<<<<<<< HEAD
 analysis_id (Ying qi)
 
 - Found 2 missing analysis_id values and no format mismatches.
 - Duplicate values were retained for later cleaning (step 2)
+=======
+analysis_id (Ying qi) Found 2 missing analysis_id values and no format or filename mismatches. Duplicate entries were retained for later review.
+>>>>>>> origin/musa-data-cleaning
 
 ```{r}
 #checking NAs and duplicates
@@ -76,11 +80,32 @@ all(grepl("^an[0-9]{10}$", data$analysis_id[!is.na(data$analysis_id)]))
 
 gene_accession_id (Musa)
 
-```{r}
+No missing values or formatting errors were found. All 2,846 unique IDs follow the expected MGI format, so no corrections are needed. The 1,924 IDs absent from the disease reference are retained because that reference is not a complete gene database.
 
+```{r}
+#checking missing gene IDs
+sum(is.na(data$gene_accession_id))
+
+#checking unexpected ID format
+sum(!grepl("^MGI:[0-9]+$", data$gene_accession_id))
+
+#checking unique gene IDs
+length(unique(data$gene_accession_id))
+
+#checking IDs against disease reference
+length(setdiff(unique(data$gene_accession_id), disease$mgi_id))
+
+#no corrections needed
 ```
 
+<<<<<<< HEAD
 gene_symbol (Ying qi)
+=======
+gene_symbol (Ying qi) Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
+
+```{r}
+library(dplyr)
+>>>>>>> origin/musa-data-cleaning
 
 - Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
 
@@ -151,15 +176,121 @@ unique(data$mouse_life_stage[data$mouse_life_stage %in% correct_names])
 table(data$mouse_life_stage, useNA = "ifany")
 ```
 
-parameter_id (Musa)
+parameter_id (Musa)\
+Found 278 missing values and many formatting inconsistencies. The code below preserves the original IDs, identifies candidates, and corrects those supported by the parameter reference or repeated matching records in the main data and values that cannot be confidently matched remains unchanged
 
 ```{r}
+#save original values
+if (!"parameter_stable_id_original" %in% names(data)) {
+  data$parameter_stable_id_original <- data$parameter_stable_id
+}
 
+#checking missing IDs
+sum(is.na(data$parameter_stable_id))
+
+#checking unexpected characters
+sum(!is.na(data$parameter_stable_id) &
+      grepl("[^A-Za-z0-9_-]", data$parameter_stable_id))
+
+#reference IDs and existing valid IDs
+parameter_lookup <- bind_rows(
+  parameter %>%
+    transmute(
+      correct_id = parameterId,
+      reference_name = param_name,
+      priority = 1
+    ),
+  data %>%
+    filter(
+      !is.na(parameter_stable_id),
+      grepl(
+        "^[A-Z]+(-[A-Z]+)*_[A-Z0-9]+_[0-9]{3}_[0-9]{3}(_[0-9]{3})?$",
+        parameter_stable_id
+      )
+    ) %>%
+    count(parameter_stable_id, parameter_name, name = "n") %>%
+    filter(n >= 2) %>%
+    transmute(
+      correct_id = parameter_stable_id,
+      reference_name = parameter_name,
+      priority = 2
+    )
+) %>%
+  filter(!is.na(correct_id), !is.na(reference_name)) %>%
+  mutate(
+    id_key = toupper(correct_id),
+    name_key = tolower(trimws(reference_name))
+  ) %>%
+  arrange(priority) %>%
+  group_by(id_key, name_key) %>%
+  summarise(correct_id = first(correct_id), .groups = "drop")
+
+#find possible corrections
+parameter_corrections <- data %>%
+  mutate(
+    row_index = row_number(),
+    candidate_key = toupper(
+      gsub("[^A-Za-z0-9_-]", "", parameter_stable_id)
+    ),
+    name_key = tolower(trimws(parameter_name))
+  ) %>%
+  left_join(
+    parameter_lookup,
+    by = c("candidate_key" = "id_key", "name_key")
+  ) %>%
+  filter(
+    !is.na(parameter_stable_id),
+    !is.na(correct_id),
+    parameter_stable_id != correct_id
+  )
+
+#correct IDs with matching reference or existing values
+data$parameter_stable_id[parameter_corrections$row_index] <-
+  parameter_corrections$correct_id
+
+#correct additional examples supported by earlier checks
+data <- data %>%
+  mutate(
+    parameter_stable_id = case_when(
+      parameter_stable_id_original == "!IMP-C_GEM_021_001" &
+        parameter_name == "Ear Morphology" ~ "IMPC_GEM_021_001",
+      
+      parameter_stable_id_original == "&IM-PC_OFD_011_001" &
+        parameter_name == "Periphery resting time" ~ "IMPC_OFD_011_001",
+      
+      parameter_stable_id_original == "-IM)PC_CBC_007_001" &
+        parameter_name == "Albumin" ~ "IMPC_CBC_007_001",
+      
+      parameter_stable_id_original == "IMPC_C-SD_0#12_0-01" &
+        parameter_name == "Coat - hair distribution - head" ~
+        "IMPC_CSD_012_001",
+      
+      parameter_stable_id_original == "UCD_O_WT_01.2_00(1" &
+        parameter_name == "Right lung weight" ~ "UCD_OWT_012_001",
+      
+      TRUE ~ parameter_stable_id
+    )
+  )
+
+#checking corrections
+sum(data$parameter_stable_id !=
+      data$parameter_stable_id_original, na.rm = TRUE)
+
+#checking remaining missing values
+sum(is.na(data$parameter_stable_id))
+
+#checking remaining unexpected characters
+sum(!is.na(data$parameter_stable_id) &
+      grepl("[^A-Za-z0-9_-]", data$parameter_stable_id))
 ```
 
+<<<<<<< HEAD
 parameter_name (Ying qi)
 
 - No significant cleaning needed to be done
+=======
+parameter_name (Ying qi) All 18,150 parameter names with matching reference IDs were exact matches. The other 9,505 records had no reference ID and could not be checked. No differences were found, and no names were changed.
+>>>>>>> origin/musa-data-cleaning
 
 ```{r}
 
@@ -241,8 +372,117 @@ data$p_value[data$p_value == 1.1] <-  NA
 
 allele_symbol (musa)
 
-```{r}
+Found 270 missing values, one incomplete angle-bracket symbol and multiple formatting inconsistencies. The code below uses existing well-formed allele symbols for the same gene accession ID and strain, while preserving allele variants such as "tm1a" and "tm1b".
 
+This corrects supported formatting variations but deliberately leaves incomplete symbols such as `Wnt11<`, ambiguous matches and missing alleles for further review.
+
+```{r}
+#save original values
+if (!"allele_symbol_original" %in% names(data)) {
+  data$allele_symbol_original <- data$allele_symbol
+}
+
+#checking missing allele symbols
+sum(is.na(data$allele_symbol))
+
+#checking unique allele symbols
+n_distinct(data$allele_symbol, na.rm = TRUE)
+
+#find repeated, well-formed allele symbols
+allele_lookup <- data %>%
+  filter(
+    !is.na(allele_symbol),
+    grepl(
+      "^[A-Za-z0-9]+<[^()<>]+\\([^()<>]+\\)[^()<>]+>$",
+      allele_symbol
+    ),
+    !grepl("[!@#$%^&*+_]", allele_symbol)
+  ) %>%
+  count(gene_accession_id, strain_name, allele_symbol, name = "n") %>%
+  filter(n >= 2) %>%
+  mutate(allele_key = toupper(allele_symbol)) %>%
+  group_by(gene_accession_id, strain_name, allele_key) %>%
+  slice_max(n, n = 1, with_ties = TRUE) %>%
+  filter(n() == 1) %>%
+  ungroup() %>%
+  transmute(
+    gene_accession_id,
+    strain_name,
+    allele_key,
+    correct_allele = allele_symbol
+  )
+
+#find possible allele corrections
+allele_corrections <- data %>%
+  mutate(
+    row_index = row_number(),
+    candidate_allele = gsub("[!@#$%^&*+_]", "", allele_symbol),
+    allele_gene = sub("<.*$", "", candidate_allele),
+    candidate_allele = if_else(
+      !is.na(gene_symbol) &
+        grepl("^[A-Za-z0-9]+$", gene_symbol) &
+        tolower(gsub("[^A-Za-z0-9]", "", allele_gene)) ==
+        tolower(gene_symbol) &
+        grepl("<", candidate_allele, fixed = TRUE),
+      paste0(gene_symbol, sub("^[^<]*", "", candidate_allele)),
+      candidate_allele
+    ),
+    allele_key = toupper(candidate_allele)
+  ) %>%
+  left_join(
+    allele_lookup,
+    by = c("gene_accession_id", "strain_name", "allele_key")
+  ) %>%
+  filter(
+    !is.na(allele_symbol),
+    !is.na(correct_allele),
+    allele_symbol != correct_allele
+  )
+
+#correct alleles with an existing matching value
+data$allele_symbol[allele_corrections$row_index] <-
+  allele_corrections$correct_allele
+
+#correct additional examples supported by earlier checks
+data <- data %>%
+  mutate(
+    allele_symbol = case_when(
+      gene_accession_id == "MGI:101948" &
+        allele_symbol_original == "Wnt11<tm1-.1(KOMP)Vlcg>" ~
+        "Wnt11<tm1.1(KOMP)Vlcg>",
+      
+      gene_accession_id == "MGI:1336167" &
+        allele_symbol_original == "Prkab11<tm1b(KOMP)Wt(si>" ~
+        "Prkab1<tm1b(KOMP)Wtsi>",
+      
+      gene_accession_id == "MGI:1913955" &
+        allele_symbol_original == "Dnase1l2<tm1).1(KOMP)#Wtsi>" ~
+        "Dnase1l2<tm1.1(KOMP)Wtsi>",
+      
+      TRUE ~ allele_symbol
+    )
+  )
+
+#checking number of corrections
+sum(data$allele_symbol !=
+      data$allele_symbol_original, na.rm = TRUE)
+
+#checking remaining missing values
+sum(is.na(data$allele_symbol))
+
+#checking remaining unbalanced parentheses
+sum(
+  stringr::str_count(data$allele_symbol, fixed("(")) !=
+    stringr::str_count(data$allele_symbol, fixed(")")),
+  na.rm = TRUE
+)
+
+#checking incomplete angle brackets
+sum(
+  !is.na(data$allele_symbol) &
+    (!grepl("<", data$allele_symbol, fixed = TRUE) |
+       !grepl(">", data$allele_symbol, fixed = TRUE))
+)
 ```
 
 lacz\_ (tom)
@@ -348,6 +588,21 @@ sum(duplicated(parameter$impcParameterOrigId))
 ```
 
 ## Data Cleaning - Procedure (Yingqi)
+<<<<<<< HEAD
+=======
+
+Checked for missing proc_desc values, exact duplicate rows, and inconsistent capitalisation in proc_name. Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
+
+```{r}
+procedure_case_check <- procedure %>%
+  filter(!is.na(proc_name), trimws(proc_name) != "") %>%
+  mutate(name_lower = tolower(trimws(proc_name))) %>%
+  group_by(name_lower) %>%
+  filter(n_distinct(trimws(proc_name)) > 1) %>%
+  ungroup() %>%
+  select(proc_name, proc_desc, impcParameterOrigId) %>%
+  distinct()
+>>>>>>> origin/musa-data-cleaning
 
 - No exact duplicates, missing values Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
 
