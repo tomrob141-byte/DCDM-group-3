@@ -36,7 +36,7 @@ Importing multiple csv files
 3.  map_dfr(x, y) runs the function y to vector x and put each output as new rows
 
 ```{r}
-files <- list.files("./group3_data/", pattern ="\\.csv$", full.names = TRUE)
+files <- list.files("../group3_data/", pattern ="\\.csv$", full.names = TRUE)
 
 read_onefile <- function(f) {
   read_csv(f, col_names = c("key","value"),
@@ -100,11 +100,11 @@ Imputing other txt files
 4.  col_names. Since the col_names have no header, we assign our own colnames
 
 ```{r}
-parameter <- read_csv("IMPC_parameter_description.txt", trim_ws = TRUE) %>%  
+parameter <- read_csv("../IMPC_parameter_description.txt", trim_ws = TRUE) %>%  
   rename(param_name = name, param_description = description)
-procedure <- read_csv("IMPC_procedure.txt", trim_ws = TRUE) %>%  
+procedure <- read_csv("../IMPC_procedure.txt", trim_ws = TRUE) %>%  
   rename(proc_name = name, proc_desc = description)
-disease <- read_tsv("Disease_information.txt",
+disease <- read_tsv("../Disease_information.txt",
                     comment = "#",
                     col_names = c("human_symbol","human_name","hgnc_id",
                                   "do_term","do_id","mouse_genotypes",
@@ -131,6 +131,8 @@ dim(bespoke)
 ```
 
 Joining data
+
+***this preliminary joining data serves only for trying to understand how these files relate to one another and will not be used in further analysis***
 
 1.  join main data to parameter by paramater id
 2.  join main data to procedure by imcParameterOrigId
@@ -171,9 +173,8 @@ precleaned_procedure <- procedure
 precleaned_disease <- disease
 precleaned_bespoke <- bespoke
 
-save(precleaned_data, join_param, join_disease, join_all, 
-     precleaned_disease, precleaned_procedure, precleaned_parameter,
-     precleaned_bespoke, file = "precleaned.RData")
+save(precleaned_data, precleaned_disease, precleaned_procedure,
+     precleaned_parameter, precleaned_bespoke, file = "precleaned.RData")
 
 ```
 

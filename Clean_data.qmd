@@ -58,14 +58,10 @@ bespoke <- precleaned_bespoke
 
 *refer to SOP for expected values or data format*
 
-<<<<<<< HEAD
 analysis_id (Ying qi)
 
 - Found 2 missing analysis_id values and no format mismatches.
 - Duplicate values were retained for later cleaning (step 2)
-=======
-analysis_id (Ying qi) Found 2 missing analysis_id values and no format or filename mismatches. Duplicate entries were retained for later review.
->>>>>>> origin/musa-data-cleaning
 
 ```{r}
 #checking NAs and duplicates
@@ -80,7 +76,9 @@ all(grepl("^an[0-9]{10}$", data$analysis_id[!is.na(data$analysis_id)]))
 
 gene_accession_id (Musa)
 
-No missing values or formatting errors were found. All 2,846 unique IDs follow the expected MGI format, so no corrections are needed. The 1,924 IDs absent from the disease reference are retained because that reference is not a complete gene database.
+- No missing values or formatting errors were found.
+
+- All 2,846 unique IDs follow the expected MGI format, so no corrections are needed. - The 1,924 IDs absent from the disease reference are retained because that reference is not a complete gene database.
 
 ```{r}
 #checking missing gene IDs
@@ -98,39 +96,45 @@ length(setdiff(unique(data$gene_accession_id), disease$mgi_id))
 #no corrections needed
 ```
 
-<<<<<<< HEAD
 gene_symbol (Ying qi)
-=======
-gene_symbol (Ying qi) Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
+
+- Based on the Guidleines for Nomenclature of Genes in Mouse,(<https://www.informatics.jax.org/nomen/gene.shtml?utm_source=chatgpt.com#gnas>), a gene symbol begins with uppercase followed by all lowercase/numbers, with several exceptions :
+
+  - it can start with sequence identifier ex : 0610009F21Rik,
+
+  - it can with start lowercase letter if the gene is only identified by recessive mutant phenotype
+
+  -  possible uppercase after the initial letter in certain cases.
+
+- Specific punctuations that are allowed are : hyphens and (). Hyphens are used to separate related sequence and pseudogene symbol from root
 
 ```{r}
-library(dplyr)
->>>>>>> origin/musa-data-cleaning
+View(data)
 
-- Corrected three gene symbols using gene_accession_id: Map2k2, Spata24, and Got1. Preserved the original values in gene_symbol_original.
+#remove special characters
+data$gene_symbol<- str_remove_all(data$gene_symbol, "[!@#$%^&*+_.]")
 
-  **(there are stil many typos for other genes)**
+#check any remaining mismatch with the conventional gene symbol
+unique(data$gene_symbol[
+  !grepl("^[A-Z][A-Za-z0-9]*$", data$gene_symbol) &
+  !is.na(data$gene_symbol)
+])
 
-```{r}
-if (!"gene_symbol_original" %in% names(data)) {
-  data$gene_symbol_original <- data$gene_symbol
-}
+#genes like 1700029H14Rik are acceptable according to guideline
+# many lowercase genes seems to be recessive and are acceptable 
+# no appropiate use of () found, so we remove
+data$gene_symbol<- str_remove_all(data$gene_symbol, "[()]")
 
+#check remaining possible misspelling
+unique(data$gene_symbol[
+  !grepl("^[A-Za-z0-9]*$", data$gene_symbol) &
+    !is.na(data$gene_symbol)
+])
+# hyphen as initial letter of gene symbol is not part of the guideline's exception so we exclude them
 data <- data %>%
-  mutate(
-    gene_symbol = case_when(
-      gene_accession_id == "MGI:1346867" ~ "Map2k2",
-      gene_accession_id == "MGI:1918492" ~ "Spata24",
-      gene_accession_id == "MGI:95791"   ~ "Got1",
-      TRUE ~ gene_symbol
-    )
-  )
+  filter(!str_starts(gene_symbol, "-"))
 
-data %>%
-  filter(gene_accession_id %in%
-           c("MGI:1346867", "MGI:1918492", "MGI:95791")) %>%
-  distinct(gene_accession_id, gene_symbol_original, gene_symbol)
-
+##we need to check more
 ```
 
 strain_name (Rexel)
@@ -176,124 +180,57 @@ unique(data$mouse_life_stage[data$mouse_life_stage %in% correct_names])
 table(data$mouse_life_stage, useNA = "ifany")
 ```
 
-parameter_id (Musa)\
-Found 278 missing values and many formatting inconsistencies. The code below preserves the original IDs, identifies candidates, and corrects those supported by the parameter reference or repeated matching records in the main data and values that cannot be confidently matched remains unchanged
+parameter_id (Musa)
+
+- Standardized phenotyping parameters for IMPC IMPReSS database is IMPC_ECG_007_001 (<https://www.ebi.ac.uk/training/online/courses/impc-solr-api/overview-of-key-impc-concepts-and-tools/the-structure-of-impc-data-pipeline-procedure-parameter/>)
+
+<!-- -->
+
+- Corrected injections of junk characters
 
 ```{r}
-#save original values
-if (!"parameter_stable_id_original" %in% names(data)) {
-  data$parameter_stable_id_original <- data$parameter_stable_id
-}
-
 #checking missing IDs
 sum(is.na(data$parameter_stable_id))
 
-#checking unexpected characters
+#removing unrelevant characters
+data$parameter_stable_id <- str_remove_all(data$parameter_stable_id, "[-!@#$%^&*()+.]")
+
+#checking remaining unexpected characters after removal
 sum(!is.na(data$parameter_stable_id) &
-      grepl("[^A-Za-z0-9_-]", data$parameter_stable_id))
+      grepl("[^A-Za-z0-9_-]", data$parameter_stable_id)) #0
 
-#reference IDs and existing valid IDs
-parameter_lookup <- bind_rows(
-  parameter %>%
-    transmute(
-      correct_id = parameterId,
-      reference_name = param_name,
-      priority = 1
-    ),
-  data %>%
-    filter(
-      !is.na(parameter_stable_id),
-      grepl(
-        "^[A-Z]+(-[A-Z]+)*_[A-Z0-9]+_[0-9]{3}_[0-9]{3}(_[0-9]{3})?$",
-        parameter_stable_id
-      )
-    ) %>%
-    count(parameter_stable_id, parameter_name, name = "n") %>%
-    filter(n >= 2) %>%
-    transmute(
-      correct_id = parameter_stable_id,
-      reference_name = parameter_name,
-      priority = 2
-    )
-) %>%
-  filter(!is.na(correct_id), !is.na(reference_name)) %>%
-  mutate(
-    id_key = toupper(correct_id),
-    name_key = tolower(trimws(reference_name))
-  ) %>%
-  arrange(priority) %>%
-  group_by(id_key, name_key) %>%
-  summarise(correct_id = first(correct_id), .groups = "drop")
+#make all upper case
+data$parameter_stable_id <- toupper(data$parameter_stable_id)
 
-#find possible corrections
-parameter_corrections <- data %>%
-  mutate(
-    row_index = row_number(),
-    candidate_key = toupper(
-      gsub("[^A-Za-z0-9_-]", "", parameter_stable_id)
-    ),
-    name_key = tolower(trimws(parameter_name))
-  ) %>%
-  left_join(
-    parameter_lookup,
-    by = c("candidate_key" = "id_key", "name_key")
-  ) %>%
-  filter(
-    !is.na(parameter_stable_id),
-    !is.na(correct_id),
-    parameter_stable_id != correct_id
-  )
+#checking any remaining format error
+unique(data$parameter_stable_id[
+  !grepl("^[A-Z0-9]+_[A-Z0-9]+_[0-9]+_[0-9]+$", data$parameter_stable_id) &
+    !is.na(data$parameter_stable_id)
+])
 
-#correct IDs with matching reference or existing values
-data$parameter_stable_id[parameter_corrections$row_index] <-
-  parameter_corrections$correct_id
+#we have identified several problems : multiple_, and _ in wrong positions
 
-#correct additional examples supported by earlier checks
-data <- data %>%
-  mutate(
-    parameter_stable_id = case_when(
-      parameter_stable_id_original == "!IMP-C_GEM_021_001" &
-        parameter_name == "Ear Morphology" ~ "IMPC_GEM_021_001",
-      
-      parameter_stable_id_original == "&IM-PC_OFD_011_001" &
-        parameter_name == "Periphery resting time" ~ "IMPC_OFD_011_001",
-      
-      parameter_stable_id_original == "-IM)PC_CBC_007_001" &
-        parameter_name == "Albumin" ~ "IMPC_CBC_007_001",
-      
-      parameter_stable_id_original == "IMPC_C-SD_0#12_0-01" &
-        parameter_name == "Coat - hair distribution - head" ~
-        "IMPC_CSD_012_001",
-      
-      parameter_stable_id_original == "UCD_O_WT_01.2_00(1" &
-        parameter_name == "Right lung weight" ~ "UCD_OWT_012_001",
-      
-      TRUE ~ parameter_stable_id
-    )
-  )
+#remove all _ 
+x <- str_remove_all(data$parameter_stable_id, "_")
 
-#checking corrections
-sum(data$parameter_stable_id !=
-      data$parameter_stable_id_original, na.rm = TRUE)
+#put _ back in appropriate places
+x <- str_replace(x, "^([A-Z]+)([A-Z]{3})(\\d{3})(\\d{3})$", "\\1_\\2_\\3_\\4")   # e.g. IMPC_CSD_039_001
+x <- str_replace(x, "^([A-Z]+)(\\d{3})(\\d{3})(\\d{3})$",   "\\1_\\2_\\3_\\4")   # e.g. MGP_026_001_006
+data$parameter_stable_id <- x
 
-#checking remaining missing values
-sum(is.na(data$parameter_stable_id))
-
-#checking remaining unexpected characters
-sum(!is.na(data$parameter_stable_id) &
-      grepl("[^A-Za-z0-9_-]", data$parameter_stable_id))
+#checking any remaining format error again
+unique(data$parameter_stable_id[
+  !grepl("^[A-Z0-9]+_[A-Z0-9]+_[0-9]+_[0-9]+$", data$parameter_stable_id) &
+    !is.na(data$parameter_stable_id)
+]) #0
 ```
 
-<<<<<<< HEAD
 parameter_name (Ying qi)
 
 - No significant cleaning needed to be done
-=======
-parameter_name (Ying qi) All 18,150 parameter names with matching reference IDs were exact matches. The other 9,505 records had no reference ID and could not be checked. No differences were found, and no names were changed.
->>>>>>> origin/musa-data-cleaning
+- **is there any reason to why chekcing for lookups?\*\***
 
 ```{r}
-
 parameter_lookup <- parameter %>%
   distinct(parameterId, param_name) %>%
   group_by(parameterId) %>%
@@ -372,117 +309,12 @@ data$p_value[data$p_value == 1.1] <-  NA
 
 allele_symbol (musa)
 
-Found 270 missing values, one incomplete angle-bracket symbol and multiple formatting inconsistencies. The code below uses existing well-formed allele symbols for the same gene accession ID and strain, while preserving allele variants such as "tm1a" and "tm1b".
-
-This corrects supported formatting variations but deliberately leaves incomplete symbols such as `Wnt11<`, ambiguous matches and missing alleles for further review.
-
 ```{r}
-#save original values
-if (!"allele_symbol_original" %in% names(data)) {
-  data$allele_symbol_original <- data$allele_symbol
-}
+# Symbols safe to exclude from official International COmmittee on Standardized Genetic Nomenclature for Mice are !, @, $, %, ^, &
 
-#checking missing allele symbols
-sum(is.na(data$allele_symbol))
+data$allele_symbol <- str_remove_all(data$allele_symbol, "[!@$%^&]")
 
-#checking unique allele symbols
-n_distinct(data$allele_symbol, na.rm = TRUE)
 
-#find repeated, well-formed allele symbols
-allele_lookup <- data %>%
-  filter(
-    !is.na(allele_symbol),
-    grepl(
-      "^[A-Za-z0-9]+<[^()<>]+\\([^()<>]+\\)[^()<>]+>$",
-      allele_symbol
-    ),
-    !grepl("[!@#$%^&*+_]", allele_symbol)
-  ) %>%
-  count(gene_accession_id, strain_name, allele_symbol, name = "n") %>%
-  filter(n >= 2) %>%
-  mutate(allele_key = toupper(allele_symbol)) %>%
-  group_by(gene_accession_id, strain_name, allele_key) %>%
-  slice_max(n, n = 1, with_ties = TRUE) %>%
-  filter(n() == 1) %>%
-  ungroup() %>%
-  transmute(
-    gene_accession_id,
-    strain_name,
-    allele_key,
-    correct_allele = allele_symbol
-  )
-
-#find possible allele corrections
-allele_corrections <- data %>%
-  mutate(
-    row_index = row_number(),
-    candidate_allele = gsub("[!@#$%^&*+_]", "", allele_symbol),
-    allele_gene = sub("<.*$", "", candidate_allele),
-    candidate_allele = if_else(
-      !is.na(gene_symbol) &
-        grepl("^[A-Za-z0-9]+$", gene_symbol) &
-        tolower(gsub("[^A-Za-z0-9]", "", allele_gene)) ==
-        tolower(gene_symbol) &
-        grepl("<", candidate_allele, fixed = TRUE),
-      paste0(gene_symbol, sub("^[^<]*", "", candidate_allele)),
-      candidate_allele
-    ),
-    allele_key = toupper(candidate_allele)
-  ) %>%
-  left_join(
-    allele_lookup,
-    by = c("gene_accession_id", "strain_name", "allele_key")
-  ) %>%
-  filter(
-    !is.na(allele_symbol),
-    !is.na(correct_allele),
-    allele_symbol != correct_allele
-  )
-
-#correct alleles with an existing matching value
-data$allele_symbol[allele_corrections$row_index] <-
-  allele_corrections$correct_allele
-
-#correct additional examples supported by earlier checks
-data <- data %>%
-  mutate(
-    allele_symbol = case_when(
-      gene_accession_id == "MGI:101948" &
-        allele_symbol_original == "Wnt11<tm1-.1(KOMP)Vlcg>" ~
-        "Wnt11<tm1.1(KOMP)Vlcg>",
-      
-      gene_accession_id == "MGI:1336167" &
-        allele_symbol_original == "Prkab11<tm1b(KOMP)Wt(si>" ~
-        "Prkab1<tm1b(KOMP)Wtsi>",
-      
-      gene_accession_id == "MGI:1913955" &
-        allele_symbol_original == "Dnase1l2<tm1).1(KOMP)#Wtsi>" ~
-        "Dnase1l2<tm1.1(KOMP)Wtsi>",
-      
-      TRUE ~ allele_symbol
-    )
-  )
-
-#checking number of corrections
-sum(data$allele_symbol !=
-      data$allele_symbol_original, na.rm = TRUE)
-
-#checking remaining missing values
-sum(is.na(data$allele_symbol))
-
-#checking remaining unbalanced parentheses
-sum(
-  stringr::str_count(data$allele_symbol, fixed("(")) !=
-    stringr::str_count(data$allele_symbol, fixed(")")),
-  na.rm = TRUE
-)
-
-#checking incomplete angle brackets
-sum(
-  !is.na(data$allele_symbol) &
-    (!grepl("<", data$allele_symbol, fixed = TRUE) |
-       !grepl(">", data$allele_symbol, fixed = TRUE))
-)
 ```
 
 lacz\_ (tom)
@@ -557,7 +389,7 @@ dim(data)
 
   - ref_paramater_groups.csv needed is in repo, contains all groups for reference. Some parameters are in twice but with different impcParameterOrigId so these have been retained for now.
 
--  duplicates from impcParameterOrigid removed.
+- duplicates from impcParameterOrigid removed.
 
 ```{r}
 # code to group the parameters based on the IMPC protocols
@@ -588,21 +420,6 @@ sum(duplicated(parameter$impcParameterOrigId))
 ```
 
 ## Data Cleaning - Procedure (Yingqi)
-<<<<<<< HEAD
-=======
-
-Checked for missing proc_desc values, exact duplicate rows, and inconsistent capitalisation in proc_name. Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
-
-```{r}
-procedure_case_check <- procedure %>%
-  filter(!is.na(proc_name), trimws(proc_name) != "") %>%
-  mutate(name_lower = tolower(trimws(proc_name))) %>%
-  group_by(name_lower) %>%
-  filter(n_distinct(trimws(proc_name)) > 1) %>%
-  ungroup() %>%
-  select(proc_name, proc_desc, impcParameterOrigId) %>%
-  distinct()
->>>>>>> origin/musa-data-cleaning
 
 - No exact duplicates, missing values Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
 
@@ -637,13 +454,13 @@ all(grepl("^[A-Z0-9]+$", disease$human_symbol), na.rm = TRUE) #FALSE
 #there are some that has, checking 
 unique(disease$human_symbol[grepl("[a-z]", disease$human_symbol)])
 unique(disease$human_symbol[grepl("[^A-Za-z0-9]", disease$human_symbol)])
-# all special characters and lowercase seems logical, no cleaning needed
+# all special characters and lowercase follows convention, no cleaning needed
 
 #checking if mouse_symbol first letter is uppercased and have no special characters
 all(grepl("^[A-Z][a-zA-Z0-9]*$", disease$mouse_symbol), na.rm = TRUE) #FALSE
 #there are some that had, checking
 unique(disease$mouse_symbol[!grepl("^[A-Z][a-zA-Z0-9]*$", disease$mouse_symbol)])
-#all special characters and lowercase seems logical, no cleaning needed
+#all special characters and lowercase follows convention, no cleaning needed
 
 #Checking if id columns follow their conventions
 all(grepl("^HGNC:.*[0-9]+$", disease$hgnc_id), na.rm = TRUE) #TRUE
@@ -665,7 +482,7 @@ all(grepl("[a-zA-Z0-9]", bespoke$DB_obj_id), na.rm = TRUE) #TRUE
 all(grepl("^[A-Z][a-zA-Z0-9]*$", bespoke$DB_obj_symbol), na.rm = TRUE) #FALSE
 #there are some that had, checking
 unique(bespoke$DB_obj_symbol[!grepl("^[A-Z][a-zA-Z0-9]*$", bespoke$DB_obj_symbol)])
-#all special characters make sense, no cleaning needed
+#all special characters follow convention, no cleaning needed
 
 #checking the notation
 all(grepl("^GO:[0-9]", bespoke$GO_id), na.rm = TRUE) #TRUE
@@ -675,7 +492,7 @@ all(grepl("^GO_REF:[0-9]", bespoke$DB_reference), na.rm = TRUE) #TRUE
 all(grepl("^[A-Z][a-zA-z0-9]", bespoke$DB_obj_synonym), na.rm = TRUE)
 #there are some that has, checking 
 unique(bespoke$DB_obj_synonym[!grepl("^[A-Z][a-zA-Z0-9]*$", bespoke$DB_obj_synonym)])
-# all special characters make sense, no cleaning needed
+# all special characters follow convention, no cleaning needed
 
 unique(bespoke$date) #all 20261009
 #change into date
@@ -683,7 +500,6 @@ bespoke$date <- as.Date(
   format(bespoke$date, scientific = FALSE, trim = TRUE),
   format = "%Y%m%d"
 )
-
 
 unique(bespoke$DB) #all 1 value
 unique(bespoke$Relation) #no other value expcept located_in, enables, involved_in, and part_of
