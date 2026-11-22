@@ -417,6 +417,10 @@ parameter <- precleaned_parameter
 #checking if there is any duplicated IMPC orig id left 
 sum(duplicated(parameter$impcParameterOrigId))
 
+#Verifying all ids are compliant
+precleaned_parameter %>%
+  filter(!grepl("^IMPC_.{3}_.{3}_.{3}$", parameterId))
+
 ```
 
 ## Data Cleaning - Procedure (Yingqi)
