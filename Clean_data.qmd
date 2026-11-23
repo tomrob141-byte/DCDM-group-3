@@ -181,7 +181,7 @@ unique(data$mouse_life_stage[data$mouse_life_stage %in% correct_names])
 table(data$mouse_life_stage, useNA = "ifany")
 ```
 
-parameter_id (Musa)
+parameter_id
 
 - Standardized phenotyping parameters for IMPC IMPReSS database is IMPC_ECG_007_001 (<https://www.ebi.ac.uk/training/online/courses/impc-solr-api/overview-of-key-impc-concepts-and-tools/the-structure-of-impc-data-pipeline-procedure-parameter/>)
 - Corrected injections of junk characters
@@ -228,60 +228,7 @@ parameter_name
 - No cleaning needed to done
 
 ```{r}
-parameter_lookup <- parameter %>%
-  distinct(parameterId, param_name) %>%
-  group_by(parameterId) %>%
-  filter(n_distinct(param_name) == 1) %>%
-  ungroup() %>%
-  distinct(parameterId, .keep_all = TRUE)
-
-parameter_name_check <- data %>%
-  left_join(
-    parameter_lookup,
-    by = c("parameter_stable_id" = "parameterId")
-  ) %>%
-  mutate(
-    name_check = case_when(
-      is.na(param_name) ~ "no_reference",
-      is.na(parameter_name) ~ "missing_in_data",
-      parameter_name == param_name ~ "match",
-      TRUE ~ "mismatch"
-    )
-  )
-
-parameter_name_check %>%
-  count(name_check)
-
-parameter_name_check %>%
-  filter(name_check != "match") %>%
-  select(file, parameter_stable_id, parameter_name, param_name, name_check) %>%
-  distinct() %>%
-  View()
-
-
-
-parameter_name_check <- parameter_name_check %>%
-  mutate(
-    name_check_detail = case_when(
-      is.na(param_name) ~ "no_reference",
-      is.na(parameter_name) ~ "missing_in_data",
-      parameter_name == param_name ~ "exact_match",
-      tolower(trimws(parameter_name)) ==
-        tolower(trimws(param_name)) ~ "case_or_outer_space_difference",
-      TRUE ~ "other_difference"
-    )
-  )
-
-parameter_name_check %>%
-  count(name_check_detail)
-
-parameter_name_check %>%
-  filter(name_check_detail %in%
-           c("case_or_outer_space_difference", "other_difference")) %>%
-  select(file, parameter_stable_id, parameter_name, param_name,
-         name_check_detail) %>%
-  distinct() %>%
-  View()
+View(data)
 ```
 
 p_value
@@ -380,7 +327,7 @@ dim(data)
 # + retain 2 rows with NAs for further analysis
 ```
 
-## Data Cleaning - Parameter (Tom)
+## Data Cleaning - Parameter 
 
 - parameters grouped from IMPC website for the testing they are related to.
 
@@ -420,9 +367,9 @@ precleaned_parameter %>%
 
 ```
 
-## Data Cleaning - Procedure 
+## Data Cleaning - Procedure
 
-- No exact duplicates, missing values Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
+- No cleaning needed to be done
 
 ```{r}
 View(procedure)
@@ -440,7 +387,9 @@ sum(duplicated(procedure$impcParameterOrigId)) #0
 
 ```
 
-## Data Cleaning - Disease 
+## Data Cleaning - Disease
+
+- No cleaning needed to be done
 
 ```{r}
 #Strings variables such as human_name, and do_term are briefly screened for any possible error 
@@ -471,7 +420,7 @@ all(grepl("^MGI:.*[0-9]+$", disease$mgi_id), na.rm = TRUE) #TRUE
 
 ```
 
-## Data Cleaning - Bespoke 
+## Data Cleaning - Bespoke
 
 - change the column date into a Date format
 
