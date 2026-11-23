@@ -126,7 +126,7 @@ data$gene_symbol<- str_remove_all(data$gene_symbol, "[()]")
 
 # hyphen as initial letter of gene symbol is not part of the guideline's exception so we exclude them
 data <- data %>%
-  filter(!str_starts(gene_symbol, "-"))
+  mutate(gene_symbol = str_remove(gene_symbol, "^-"))
 
 
 #check remaining possible misspelling
@@ -327,7 +327,7 @@ dim(data)
 # + retain 2 rows with NAs for further analysis
 ```
 
-## Data Cleaning - Parameter 
+## Data Cleaning - Parameter
 
 - parameters grouped from IMPC website for the testing they are related to.
 
