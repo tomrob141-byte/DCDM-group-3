@@ -50,6 +50,7 @@ parameter <- precleaned_parameter
 procedure <- precleaned_procedure
 disease <- precleaned_disease
 bespoke <- precleaned_bespoke
+
 ```
 
 ## Data Cleaning -Main Data
@@ -58,7 +59,7 @@ bespoke <- precleaned_bespoke
 
 *refer to SOP for expected values or data format*
 
-analysis_id
+[**analysis_id**]{.underline}
 
 - Found 2 missing analysis_id values and no format mismatches.
 - Duplicate values were retained for later cleaning (step 2)
@@ -74,11 +75,11 @@ all(grepl("^an[0-9]{10}$", data$analysis_id[!is.na(data$analysis_id)]))
 #TRUE, all values followed the convention, no cleaning needed
 ```
 
-gene_accession_id
+[**gene_accession_id**]{.underline}
 
 - No missing values or formatting errors were found.
 
-- All 2,846 unique IDs follow the expected MGI format, so no corrections are needed. - The 1,924 IDs absent from the disease reference are retained because that reference is not a complete gene database.
+- All 2,846 unique IDs follow the expected MGI format, so no corrections are needed.
 
 ```{r}
 #checking missing gene IDs
@@ -96,7 +97,7 @@ length(setdiff(unique(data$gene_accession_id), disease$mgi_id))
 #no corrections needed
 ```
 
-gene_symbol
+[**gene_symbol**]{.underline}
 
 - Based on the Guidleines for Nomenclature of Genes in Mouse,(<https://www.informatics.jax.org/nomen/gene.shtml?utm_source=chatgpt.com#gnas>), a gene symbol begins with uppercase followed by all lowercase/numbers, with several exceptions :
 
@@ -108,7 +109,18 @@ gene_symbol
 
 - Specific punctuations that are allowed are : hyphens and (). Hyphens are used to separate related sequence and pseudogene symbol from root
 
+- Manually cleaning the data took too much time, resort to alternative cleaning : replacing all gene symbol value with reference from MGI website based on their gene accession id
+
 ```{r}
+##Importing the official MGI gene list 
+readLines("~/Downloads/MRK_List2.rpt", n = 2)
+ref_genesymbol <- read.delim("~/Downloads/MRK_List2.rpt", header = TRUE, check.names = FALSE)
+
+#extracting only the column of gene accession id and gene symbol name 
+ref_genesymbol <- ref_genesymbol %>% 
+  select("MGI Accession ID", "Marker Symbol")
+
+##cleaning the data
 #remove special characters
 data$gene_symbol<- str_remove_all(data$gene_symbol, "[!@#$%^&*+_.]")
 
@@ -119,10 +131,8 @@ unique(data$gene_symbol[
 ])
 
 #genes like 1700029H14Rik are acceptable according to guideline
-# many lowercase genes seems to be recessive and are acceptable 
 # no appropiate use of () found, so we remove
 data$gene_symbol<- str_remove_all(data$gene_symbol, "[()]")
-
 
 # hyphen as initial letter of gene symbol is not part of the guideline's exception so we exclude them
 data <- data %>%
@@ -130,17 +140,70 @@ data <- data %>%
 
 
 #check remaining possible misspelling
-unique(data$gene_symbol[
+unique_symbols <- unique(data$gene_symbol[
   !grepl("^[A-Za-z0-9]*$", data$gene_symbol) &
     !is.na(data$gene_symbol)
 ])
+unique_symbols
 
+#checking which hypen are legitimate by comparing it to the reference
+included_symbols <- unique_symbols[
+  unique_symbols %in% ref_genesymbol$`Marker Symbol`
+]
+included_symbols 
+#"Hbb-bh2","H2-M5","Krtap17-1","H2-Q10", and "Pphln1-ps1" are the only legitimate ones
 
+#removing all illegitimate hyphens
+data <- data %>%
+  mutate(
+    gene_symbol = if_else(
+      gene_symbol %in% included_symbols,
+      gene_symbol,
+      str_remove_all(gene_symbol, "-")
+    )
+  )
+
+#check remaining misspelling
+unique(data$gene_symbol[
+  !grepl("^[A-Za-z0-9]*$", data$gene_symbol) &
+    !is.na(data$gene_symbol)
+]) #none
+
+#check which lowercase are legitimate by comparing it to the reference
+comparison <- data %>%
+  distinct(gene_symbol) %>%
+  filter(!gene_symbol %in% ref_genesymbol$`Marker Symbol`)
+
+View(comparison) 
+###still hundreds of non-uniform forms of misspelling
+### cleaning proof to be too tiresome, will resolve to replacing all gene symbols based on MGI Accesion id
 ```
 
-strain_name
+Alternative cleaning :
 
-- No error found
+- In the end, chosed to replace all values with reference data from website (MRK List2)\
+  <https://www.informatics.jax.org/downloads/reports/index.html>
+
+```{r}
+#replace all genesymbol with reference Marker Symbol based on its corresponding MGI Accesion ID
+data <- data %>%
+  left_join(
+    ref_genesymbol %>%
+      select(`MGI Accession ID`, `Marker Symbol`),
+    by = c("gene_accession_id" = "MGI Accession ID")
+  ) %>%
+  mutate(
+    gene_symbol = coalesce(`Marker Symbol`, gene_symbol)
+  ) %>%
+  select(-`Marker Symbol`)
+
+#checking any unsuccessful replacement
+sum(is.na(data$gene_symbol)) #0, all successful 
+```
+
+[**strain_name**]{.underline}
+
+- No cleaning needed
 
 ```{r}
 #checking unexpected values 
@@ -153,7 +216,7 @@ table(data$strain_name, useNA = "ifany")
 
 ```
 
-mouse_life_stage
+**mouse_life_stage**
 
 - 445 errors corrected in life stages
 
@@ -181,7 +244,7 @@ unique(data$mouse_life_stage[data$mouse_life_stage %in% correct_names])
 table(data$mouse_life_stage, useNA = "ifany")
 ```
 
-parameter_id
+**parameter_id**
 
 - Standardized phenotyping parameters for IMPC IMPReSS database is IMPC_ECG_007_001 (<https://www.ebi.ac.uk/training/online/courses/impc-solr-api/overview-of-key-impc-concepts-and-tools/the-structure-of-impc-data-pipeline-procedure-parameter/>)
 - Corrected injections of junk characters
@@ -223,7 +286,7 @@ unique(data$parameter_stable_id[
 ]) #0
 ```
 
-parameter_name
+**parameter_name**
 
 - No cleaning needed to done
 
@@ -231,7 +294,7 @@ parameter_name
 View(data)
 ```
 
-p_value
+**p_value**
 
 - 1 row has value 1.1. Changed to NA
 - Many pvalue is 0. Assumed its a very small p_value, need to floor it before log transformation later
@@ -251,17 +314,19 @@ data$p_value[data$p_value == 1.1] <-  NA
 #we need to floor them later when doing analysis
 ```
 
-allele_symbol
+**allele_symbol**
+
+- Replaced all values with reference from MGI website : <https://www.informatics.jax.org/downloads/reports/MGI_PhenotypicAllele.rpt>
 
 ```{r}
-# Symbols safe to exclude from official International COmmittee on Standardized Genetic Nomenclature for Mice are !, @, $, %, ^, &
+# Similar to gene symbol, cleaning manually proved to be tiresome due to abundant non-uniform and random forms of misspelling 
+# will resolve to replacing values with reference from MGI website
 
-data$allele_symbol <- str_remove_all(data$allele_symbol, "[!@$%^&]")
 
 
 ```
 
-lacz\_
+**lacz\_**
 
 - 663 typos corrected in lacz_blood, 504 in brain, 575 in colon, 588 in eye, 908 in heart. 604 in kidney, 640 in liver, 600 in lung, 941 in skeletal muscle, 595 in skin, 953 in vascular system.
 
