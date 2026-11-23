@@ -58,7 +58,7 @@ bespoke <- precleaned_bespoke
 
 *refer to SOP for expected values or data format*
 
-analysis_id (Ying qi)
+analysis_id
 
 - Found 2 missing analysis_id values and no format mismatches.
 - Duplicate values were retained for later cleaning (step 2)
@@ -74,7 +74,7 @@ all(grepl("^an[0-9]{10}$", data$analysis_id[!is.na(data$analysis_id)]))
 #TRUE, all values followed the convention, no cleaning needed
 ```
 
-gene_accession_id (Musa)
+gene_accession_id
 
 - No missing values or formatting errors were found.
 
@@ -96,7 +96,7 @@ length(setdiff(unique(data$gene_accession_id), disease$mgi_id))
 #no corrections needed
 ```
 
-gene_symbol (Ying qi)
+gene_symbol
 
 - Based on the Guidleines for Nomenclature of Genes in Mouse,(<https://www.informatics.jax.org/nomen/gene.shtml?utm_source=chatgpt.com#gnas>), a gene symbol begins with uppercase followed by all lowercase/numbers, with several exceptions :
 
@@ -104,13 +104,11 @@ gene_symbol (Ying qi)
 
   - it can with start lowercase letter if the gene is only identified by recessive mutant phenotype
 
-  -  possible uppercase after the initial letter in certain cases.
+  - possible uppercase after the initial letter in certain cases.
 
 - Specific punctuations that are allowed are : hyphens and (). Hyphens are used to separate related sequence and pseudogene symbol from root
 
 ```{r}
-View(data)
-
 #remove special characters
 data$gene_symbol<- str_remove_all(data$gene_symbol, "[!@#$%^&*+_.]")
 
@@ -125,19 +123,22 @@ unique(data$gene_symbol[
 # no appropiate use of () found, so we remove
 data$gene_symbol<- str_remove_all(data$gene_symbol, "[()]")
 
+
+# hyphen as initial letter of gene symbol is not part of the guideline's exception so we exclude them
+data <- data %>%
+  filter(!str_starts(gene_symbol, "-"))
+
+
 #check remaining possible misspelling
 unique(data$gene_symbol[
   !grepl("^[A-Za-z0-9]*$", data$gene_symbol) &
     !is.na(data$gene_symbol)
 ])
-# hyphen as initial letter of gene symbol is not part of the guideline's exception so we exclude them
-data <- data %>%
-  filter(!str_starts(gene_symbol, "-"))
 
-##we need to check more
+
 ```
 
-strain_name (Rexel)
+strain_name
 
 - No error found
 
@@ -152,7 +153,7 @@ table(data$strain_name, useNA = "ifany")
 
 ```
 
-mouse_life_stage (Tom)
+mouse_life_stage
 
 - 445 errors corrected in life stages
 
@@ -183,9 +184,6 @@ table(data$mouse_life_stage, useNA = "ifany")
 parameter_id (Musa)
 
 - Standardized phenotyping parameters for IMPC IMPReSS database is IMPC_ECG_007_001 (<https://www.ebi.ac.uk/training/online/courses/impc-solr-api/overview-of-key-impc-concepts-and-tools/the-structure-of-impc-data-pipeline-procedure-parameter/>)
-
-<!-- -->
-
 - Corrected injections of junk characters
 
 ```{r}
@@ -225,10 +223,9 @@ unique(data$parameter_stable_id[
 ]) #0
 ```
 
-parameter_name (Ying qi)
+parameter_name
 
-- No significant cleaning needed to be done
-- **is there any reason to why chekcing for lookups?\*\***
+- No cleaning needed to done
 
 ```{r}
 parameter_lookup <- parameter %>%
@@ -287,7 +284,7 @@ parameter_name_check %>%
   View()
 ```
 
-p_value (Rexel)
+p_value
 
 - 1 row has value 1.1. Changed to NA
 - Many pvalue is 0. Assumed its a very small p_value, need to floor it before log transformation later
@@ -307,7 +304,7 @@ data$p_value[data$p_value == 1.1] <-  NA
 #we need to floor them later when doing analysis
 ```
 
-allele_symbol (musa)
+allele_symbol
 
 ```{r}
 # Symbols safe to exclude from official International COmmittee on Standardized Genetic Nomenclature for Mice are !, @, $, %, ^, &
@@ -317,7 +314,7 @@ data$allele_symbol <- str_remove_all(data$allele_symbol, "[!@$%^&]")
 
 ```
 
-lacz\_ (tom)
+lacz\_
 
 - 663 typos corrected in lacz_blood, 504 in brain, 575 in colon, 588 in eye, 908 in heart. 604 in kidney, 640 in liver, 600 in lung, 941 in skeletal muscle, 595 in skin, 953 in vascular system.
 
@@ -423,7 +420,7 @@ precleaned_parameter %>%
 
 ```
 
-## Data Cleaning - Procedure (Yingqi)
+## Data Cleaning - Procedure 
 
 - No exact duplicates, missing values Found 3,481 missing descriptions and no exact duplicates. The two ECG descriptions belong to different ID groups; no corrections were needed.
 
@@ -443,7 +440,7 @@ sum(duplicated(procedure$impcParameterOrigId)) #0
 
 ```
 
-## Data Cleaning - Disease (Rex)
+## Data Cleaning - Disease 
 
 ```{r}
 #Strings variables such as human_name, and do_term are briefly screened for any possible error 
@@ -474,7 +471,7 @@ all(grepl("^MGI:.*[0-9]+$", disease$mgi_id), na.rm = TRUE) #TRUE
 
 ```
 
-## Data Cleaning - Bespoke (Tom)
+## Data Cleaning - Bespoke 
 
 - change the column date into a Date format
 
