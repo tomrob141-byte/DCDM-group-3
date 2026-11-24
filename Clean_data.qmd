@@ -109,16 +109,30 @@ length(setdiff(unique(data$gene_accession_id), disease$mgi_id))
 
 - Specific punctuations that are allowed are : hyphens and (). Hyphens are used to separate related sequence and pseudogene symbol from root
 
-- Manually cleaning the data took too much time, resort to alternative cleaning : replacing all gene symbol value with reference from MGI website based on their gene accession id
+- Manually cleaning the data turns out to be impossible without reference data, resort to alternative cleaning : replacing all gene symbol value with reference from MGI website based on their gene accession id
+
+[Importing reference for gene_symbols]{.underline}
 
 ```{r}
 ##Importing the official MGI gene list 
 readLines("~/Downloads/MRK_List2.rpt", n = 2)
-ref_genesymbol <- read.delim("~/Downloads/MRK_List2.rpt", header = TRUE, check.names = FALSE)
+ref_genesymbol <- read.delim("./MGI_genesymbol_ref.rpt", header = TRUE, check.names = FALSE)
 
 #extracting only the column of gene accession id and gene symbol name 
 ref_genesymbol <- ref_genesymbol %>% 
   select("MGI Accession ID", "Marker Symbol")
+
+```
+
+[Tried attempt for manual cleaning]{.underline}
+
+**Dont run this code \**
+if (FALSE) {} has been placed to skip this chunk of code\
+#! eval:FALSE has been placed to skip rendering in Quarto
+
+```{r}
+#! eval:FALSE
+if (FALSE) {
 
 ##cleaning the data
 #remove special characters
@@ -177,6 +191,7 @@ comparison <- data %>%
 View(comparison) 
 ###still hundreds of non-uniform forms of misspelling
 ### cleaning proof to be too tiresome, will resolve to replacing all gene symbols based on MGI Accesion id
+}
 ```
 
 Alternative cleaning :
@@ -190,11 +205,8 @@ data <- data %>%
   left_join(
     ref_genesymbol %>%
       select(`MGI Accession ID`, `Marker Symbol`),
-    by = c("gene_accession_id" = "MGI Accession ID")
-  ) %>%
-  mutate(
-    gene_symbol = coalesce(`Marker Symbol`, gene_symbol)
-  ) %>%
+    by = c("gene_accession_id" = "MGI Accession ID")) %>%
+  mutate(gene_symbol = coalesce(`Marker Symbol`, gene_symbol)) %>%
   select(-`Marker Symbol`)
 
 #checking any unsuccessful replacement
@@ -316,12 +328,88 @@ data$p_value[data$p_value == 1.1] <-  NA
 
 **allele_symbol**
 
-- Replaced all values with reference from MGI website : <https://www.informatics.jax.org/downloads/reports/MGI_PhenotypicAllele.rpt>
+- Tried replacing all values with reference from MGI website : [https://www.informatics.jax.org/downloads/reports/MGI_PhenotypicAllele.rp](https://www.informatics.jax.org/downloads/reports/MGI_PhenotypicAllele.rpt){.uri}t but it does not work because gene_accession_id correspond to multiple allele symbol. So it result in many-to many relationship
+
+[Importing reference file for allele_symbol]{.underline}
 
 ```{r}
-# Similar to gene symbol, cleaning manually proved to be tiresome due to abundant non-uniform and random forms of misspelling 
-# will resolve to replacing values with reference from MGI website
+allele_ref <- read.delim(
+  "./MGI_allele_ref.rpt",
+  sep = "\t",
+  header = FALSE,
+  comment.char = "#")
 
+View(allele_ref)
+
+#keep only MGI_id and reference allele name 
+allele_ref <- allele_ref %>%
+  select(V7, V2) %>%
+  rename(MGI_id = V7, allele = V2)
+
+```
+
+[Failed attempt to substitute the data with reference due to gene accession_id references to many alleles (one to many relationship)]{.underline}
+
+**Dont run this code \**
+if (FALSE) {} have been placed to skip this chunk of code \
+#! eval:FALSE have been placed to skip rendering in quarto
+
+```{r}
+#! eval:FALSE
+
+if (FALSE) {
+  
+#replacing allele_name in main data with reference
+data <-  data %>% 
+  left_join(allele_ref, by = c("gene_accession_id" = "MGI_id")) %>% 
+  mutate(allele_symbol = coalesce(allele, allele_symbol)) %>% 
+  select(-allele)
+##Many resulted in many to many relationship, because apparently one gene_id have many forms of alleles
+
+#revert back to precleaned data
+data <- precleaned_data
+}
+```
+
+Attempt manual cleaning according to the convention of allele names\
+Will not be 100% accurate to the reference, but we figured at least its close enough to enable search later on and alleles_symbol are not used in further downstream analyses
+
+```{r}
+#Allele symbols allowed ()*/<> but not other junk characters
+#remove any inappropiate junk symbols
+data <- precleaned_data
+data <- data %>%
+  mutate(
+    allele_symbol = str_remove_all(
+      allele_symbol,
+      "[^A-Za-z0-9()*/<>]"
+    ))
+
+#Remove any inappropiate junk characters before <>, junk characters that are allowed in gene symbol is only - and (), but in our previous analysis when cleaning gene_symbol manually none of the () found are appropiate, so we will exclude them 
+data <- data %>%
+  mutate(
+    allele_symbol = str_replace(
+      allele_symbol,
+      "^[^<]*",
+      function(x) str_remove_all(x, "[^A-Za-z0-9-]")
+    ))
+
+#check if there are still any gene symbol that dont match 
+sum(
+  str_extract(data$allele_symbol, "^[^<]+") != data$gene_symbol,
+  na.rm = TRUE) #456 does not match 
+
+#View which ones are not matching
+allele_checking <- data %>%
+  filter(
+    str_extract(allele_symbol, "^[^<]+") != gene_symbol
+  ) %>%
+  select(gene_symbol, allele_symbol)
+
+View(allele_checking)
+
+##many are case sensitive or minor one or two letters deletion/insertion
+#but some of them are very different
 
 
 ```
