@@ -37,6 +37,7 @@ Importing multiple csv files
 
 ```{r}
 files <- list.files("../group3_data/", pattern ="\\.csv$", full.names = TRUE)
+#group3_data is analysis files not found in github
 
 read_onefile <- function(f) {
   read_csv(f, col_names = c("key","value"),
@@ -132,7 +133,7 @@ dim(bespoke)
 
 Joining data
 
-***this preliminary joining data serves only for trying to understand how these files relate to one another and will not be used in further analysis***
+***this preliminary joining data serves only for trying to understand how these files relate to one another and will not be used in further analysis, it will not be included in the precleaned.Rdata as well***
 
 1.  join main data to parameter by paramater id
 2.  join main data to procedure by imcParameterOrigId
