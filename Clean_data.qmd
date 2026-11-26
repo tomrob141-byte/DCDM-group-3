@@ -127,8 +127,7 @@ ref_genesymbol <- ref_genesymbol %>%
 
 [Tried attempt for manual cleaning]{.underline}
 
-**Dont run this code \**
-if (FALSE) {} has been placed to skip this chunk of code\
+\*\*Dont run this code \*\* if (FALSE) {} has been placed to skip this chunk of code\
 #! eval:FALSE has been placed to skip rendering in Quarto
 
 ```{r}
@@ -351,8 +350,7 @@ allele_ref <- allele_ref %>%
 
 [Failed attempt to substitute the data with reference due to gene accession_id references to many alleles (one to many relationship)]{.underline}
 
-**Dont run this code \**
-if (FALSE) {} have been placed to skip this chunk of code \
+\*\*Dont run this code \*\* if (FALSE) {} have been placed to skip this chunk of code\
 #! eval:FALSE have been placed to skip rendering in quarto
 
 ```{r}
@@ -513,7 +511,7 @@ suggested_corrections <- data.frame(
     amatch(unique_vals, correct_vals, maxDist = 3)
   ]
 )
-print(suggested_corrections)
+View(suggested_corrections)
 lacz <- c("lacz_blood", "lacz_brain", "lacz_colon", "lacz_eye", "lacz_heart", "lacz_kidney", "lacz_liver", 
           "lacz_lung", "lacz_skeletal_muscle", "lacz_skin", "lacz_vascular_system")
 
@@ -712,10 +710,10 @@ vis_miss(data)
 
 No handling needed.
 
-Key variables : \
+Key variables :\
 - Analysis_id and genes related variables have no missing data\
 - Parameter name have no misisng data\
-- Paramater_stable_id have 1% missing data, should these missing id are able to be deduced by their parameter name by looking up the reference, manual input will be done in the future \
+- Paramater_stable_id have 1% missing data, should these missing id are able to be deduced by their parameter name by looking up the reference, manual input will be done in the future\
 - pvalues have 1%. missing data and will be excluded later during analysis. But since these data will be included in databases, we chose not to exclude them at this stage\
 
 ### 5. Save cleaned files
