@@ -1,0 +1,77 @@
+,suffixes,description,Link
+1,SLW,Sleep Wake,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=163&pipeID=12
+2,EYE,Eye Morphology,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=1389&pipeID=7
+3,008,Modified SHIRPA,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=11&pipeID=2
+4,PAT,Gross Pathology and Tissue Collection,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=775&pipeID=7
+5,ECH,Echo,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=654&pipeID=7
+6,CSD,Combined SHIRPA and Dysmorphology,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=797&pipeID=7
+7,HEM,Hematology,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=674&pipeID=7
+8,IPG,Intraperitoneal glucose tolerance test (IPGTT),https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=531&pipeID=7
+9,ECG,Electrocardiogram (ECG),https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=1415&pipeID=7
+10,OFD,Open Field,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=496&pipeID=7
+11,018,FACs Analysis,https://www.mousephenotype.org/impress/PipelineInfo?id=2
+12,014,Slit Lamp,https://www.mousephenotype.org/impress/PipelineInfo?id=2
+13,HIS,Histopathology,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=1338&pipeID=7
+14,ALZ,Adult LacZ,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=640&pipeID=7
+15,NA,NA,NA
+16,IMM,Immunophenotyping,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=1225&pipeID=7
+17,GEM,Gross Morphology Embryo E12.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=906&pipeID=7
+18,005,DEXA,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=6&pipeID=1
+19,OWT,Organ Weight,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=939&pipeID=7
+20,VIA,Viability Primary Screen,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=1188&pipeID=7
+21,DXA,Body Composition (DEXA lean/fat),https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=548&pipeID=7
+22,026,Dysmorphology,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=48&pipeID=4
+23,TLS,Tail Suspension,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=160&pipeID=12
+24,XRY,X-ray,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=556&pipeID=7
+25,MLN,Mesenteric Lymph Node Immunophenotyping,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=223&pipeID=15
+26,CBC,Clinical Chemistry,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=782&pipeID=7
+27,FER,Fertility of Homozygous Knock-out Mice,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=632&pipeID=7
+28,GRS,Grip strength,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=509&pipeID=7
+29,GEP,Gross Morphology Embryo E18.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=918&pipeID=7
+30,HWT,Heart Weight,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=601&pipeID=7
+31,ACS,Acoustic Startle and Pre-pulse Inhibition (PPI),https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=740&pipeID=7
+32,025,Clinical Chemistry,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=58&pipeID=4
+33,001,Dysmorphology,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=1&pipeID=1
+34,GEO,Gross Morphology Embryo E14.5-E15.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=912&pipeID=7
+35,007,Open-field,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=10&pipeID=2
+36,006,X-Ray,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=7&pipeID=1
+37,020,Heart weight/tibia length,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=9&pipeID=1
+38,ABR,Auditory Brain Stem Response,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=665&pipeID=7
+39,003,Calorimetry,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=4&pipeID=1
+40,GEL,Gross Morphology Embryo E9.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=870&pipeID=7
+41,PBI,Whole blood peripheral blood leukocyte immunophenotyping,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=216&pipeID=15
+42,BMI,Bone marrow immunophenotyping,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=220&pipeID=15
+43,CAL,Indirect Calorimetry,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=852&pipeID=7
+44,PLC,Plasma Chemistry,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=157&pipeID=12
+45,FEA,Fear Conditioning,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=951&pipeID=7
+46,016,Haematology,https://www.mousephenotype.org/impress/PipelineInfo?id=2
+47,HBD,Hole-board Exploration,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=156&pipeID=12
+48,LDT,Light-Dark Test,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=956&pipeID=7
+49,011,Acoustic Startle&PPI,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=14&pipeID=2
+50,013,Indirect ophthalmoscopy,https://www.mousephenotype.org/impress/PipelineInfo?id=2
+51,GPL,Gross Morphology Placenta E9.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=812&pipeID=7
+52,ANA,Anti-nuclear antibody assay,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=217&pipeID=15
+53,ERG,Electroretinography,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=162&pipeID=12
+54,GPO,Gross Morphology Placenta E14.5-E15.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=823&pipeID=7
+55,EEI,Ear epidermis immunophenotyping,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=219&pipeID=15
+56,GPP,Gross Morphology Placenta E18.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=829&pipeID=7
+57,GPM,Gross Morphology Placenta E12.5,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=818&pipeID=7
+58,TFL,Tail Flick,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=164&pipeID=9
+59,INS,Insulin Blood Level,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=790&pipeID=7
+60,EVP,Viability E18.5 Secondary Screen,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=768&pipeID=7
+61,XMV,Vertebral Microradiography,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=285&pipeID=15
+62,EVL,Viability E9.5 Secondary Screen,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=748&pipeID=7
+63,LFO,Lung mechanics by forced oscillations,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=1224&pipeID=44
+64,CHL,Challenge Whole Body Plethysmography,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=539&pipeID=7
+65,012,Hot Plate,https://www.mousephenotype.org/impress/PipelineInfo?id=2
+66,ROT,Rotarod,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=168&pipeID=14
+67,ECT,Electroconvulsive Threshold Testing,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=161&pipeID=12
+68,004,Simplified IPGTT,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=5&pipeID=1
+69,015,Clinical Chemistry,https://www.mousephenotype.org/impress/PipelineInfo?id=2
+70,009,Grip-Strength,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=12&pipeID=2
+71,URI,Urinalysis,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=246&pipeID=12
+72,EVM,Viability E12.5 Secondary Screen,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=755&pipeID=7
+73,019,Immunoglobulin,https://www.mousephenotype.org/impress/PipelineInfo?id=2
+74,EVO,Viability E14.5-E15.5 Secondary Screen,https://www.mousephenotype.org/impress/ProcedureInfo?action=list&procID=761&pipeID=7
+75,021,Fasted Clinical Chemistry,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=8&pipeID=1
+76,023,FACs Analysis,https://web.mousephenotype.org/impress/ProcedureInfo?action=list&procID=56&pipeID=4
