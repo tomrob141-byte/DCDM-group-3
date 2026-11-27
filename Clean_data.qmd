@@ -664,7 +664,6 @@ precleaned_parameter <- precleaned_parameter %>%
     references %>% select(suffixes, description),
     by = "suffixes")
 
-
 # handling repeats
 precleaned_parameter %>%
   filter(duplicated(impcParameterOrigId))
@@ -676,8 +675,66 @@ precleaned_parameter <- precleaned_parameter %>%
   distinct(impcParameterOrigId, .keep_all = TRUE)
 
 parameter <- precleaned_parameter
+
+#Creating broad groups based on reference SOP
 parameter <-  parameter %>% 
-  rename(group = description)
+  rename(suffix = suffixes,
+    suffix_desc = description)
+
+parameter <- parameter %>%
+  mutate(
+    group = case_when(
+      
+      # 1. Weight and body composition
+      suffix %in% c("OWT", "HWT", "020", "005", "DXA") ~
+        "Weight and body composition",
+      
+      # 2. Brain, behaviour and neurological function
+      suffix %in% c(
+        "SLW", "LDT", "OFD", "007", "FEA", "HBD",
+        "TLS", "ROT", "ACS", "011", "ABR", "ECT",
+        "TFL", "012", "008", "CSD", "GRS", "009"
+      ) ~ "Brain, behaviour and neurological function",
+      
+      # 3. Imaging and morphology
+      suffix %in% c(
+        "EYE", "014", "013", "XRY", "006", "XMV",
+        "GEL", "GEM", "GEO", "GEP", "GPL", "GPM",
+        "GPO", "GPP", "001", "026", "ERG"
+      ) ~ "Imaging and morphology",
+      
+      # 4. Cardiovascular and respiratory function
+      suffix %in% c("ECH", "ECG", "LFO", "CHL") ~
+        "Cardiovascular and respiratory function",
+      
+      # 5. Blood, clinical chemistry and metabolism
+      suffix %in% c(
+        "CBC", "025", "015", "HEM", "016", "PLC",
+        "INS", "IPG", "004", "003", "CAL", "021", "URI"
+      ) ~ "Blood, clinical chemistry and metabolism",
+      
+      # 6. Immune system and immunophenotyping
+      suffix %in% c(
+        "IMM", "MLN", "PBI", "BMI", "EEI",
+        "019", "ANA", "018", "023"
+      ) ~ "Immune system and immunophenotyping",
+      
+      # 7. Histopathology and Tissue Analysis
+      suffix %in% c("HIS", "PAT", "ALZ") ~
+        "Histopathology and Tissue Analysis",
+      
+      # 8. Reproductive and developmental biology
+      suffix %in% c("FER", "VIA", "EVL", "EVM", "EVO", "EVP") ~
+        "Reproductive and developmental biology",
+    )
+  ) %>%
+  relocate(group, .after = suffix_desc)
+
+parameter %>% 
+  filter(is.na(suffix_desc)) %>% 
+  distinct(suffix)
+  
+View(references)
 
 
 #checking if there is any duplicated IMPC orig id left 
