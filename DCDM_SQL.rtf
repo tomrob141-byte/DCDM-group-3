@@ -1,0 +1,1728 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2870
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red115\green158\blue202;\red204\green204\blue204;\red193\green170\blue108;
+\red192\green192\blue192;\red238\green204\blue100;\red158\green158\blue158;\red183\green136\blue211;\red0\green184\blue184;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c45098\c61961\c79216;\csgenericrgb\c80000\c80000\c80000;\csgenericrgb\c75686\c66667\c42353;
+\csgenericrgb\c75294\c75294\c75294;\csgenericrgb\c93333\c80000\c39216;\csgenericrgb\c61961\c61961\c61961;\csgenericrgb\c71765\c53333\c82745;\csgenericrgb\c0\c72157\c72157;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs24 \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `analysis`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `analysis_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `allele_symbol`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `parameter_stable_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `p_value`
+\f1\b0 \cf3  
+\f0\b \cf2 FLOAT
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `lacz_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `strain_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `life_stage_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `analysis_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `parameter`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `paramater_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `name`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `description`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `paramater_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `procedure`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `procedure_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `name`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `description`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `isMandatory`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `impcParameterOrigId`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `procedure_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `strain`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `strain_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `strain_name`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `strain_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `lifestage`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `life_stage_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `life_stage_name`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `life_stage_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `human_gene`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `human_symbol`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `human_name`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `mouse_gene`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `gene_symbol`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `allele`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `allele_symbol`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `allele_symbol`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `analysis_lacz`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `analysis_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `tissue_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `expression_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `analysis_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `tissue`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `tissue_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `tissue_name`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `tissue_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `expression`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `expression_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `expression_type`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `expression_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `gene_disease`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `DOID`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `disease`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `DO_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `DO_term`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `DO_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `disease_genotype`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `genotype_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `DO_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `genotype_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `parameter_groups`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `group_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `parameter_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `group_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `parameter_group_details`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `group_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `group_name`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `description`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `group_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `procedure_parameter`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `parameter_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	
+\f0\b \cf4 `procedure_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `procedure_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  
+\f0\b \cf4 `GO_annotation`
+\f1\b0 \cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	
+\f0\b \cf4 `annotation_id`
+\f1\b0 \cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  \cf7 UNSIGNED\cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3  \cf7 AUTO_INCREMENT\cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `GO_id`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `relation`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `evidence_code`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `with_from`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	
+\f0\b \cf4 `aspect`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `annotation_date`
+\f1\b0 \cf3  
+\f0\b \cf2 DATE
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `assigned_by`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	
+\f0\b \cf4 `annotation_extension`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	
+\f0\b \cf4 `gene_product_form_ID`
+\f1\b0 \cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `annotation_id`
+\f1\b0 \cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 CREATE
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf2 IF
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 EXISTS
+\f1\b0 \cf3  \cf8 `gene_ontology`\cf3  (\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf3 	\cf9 `source_db`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `protein_accession`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `gene_symbol`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `relationship_to_GO_terms`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `GO_id`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `supporting_references`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `evidence_supporting_annotation`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `additional_evidence`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	\cf9 `GO_category`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `protein_name`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `entity_type`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `taxon`\cf3  
+\f0\b \cf2 INTEGER
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `synonms`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `annotation_date`\cf3  
+\f0\b \cf2 DATE
+\f1\b0 \cf3  
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `organisation_database_assigning_annotation`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ) 
+\f0\b \cf2 NOT
+\f1\b0 \cf3  
+\f0\b \cf2 NULL
+\f1\b0 \cf3 ,\cf0 \
+\cf3 	\cf9 `additional_biological_context`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	\cf9 `isoform_or_modified_form`\cf3  
+\f0\b \cf2 VARCHAR
+\f1\b0 \cf3 (\cf5 255\cf3 ),\cf0 \
+\cf3 	
+\f0\b \cf2 PRIMARY
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (\cf9 `protein_accession`\cf3 )\cf0 \
+\cf3 )\cf6 ;\cf0 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf7 \ul \ulc7 A2398\cf0 \ulnone \
+\cf7 \ul \ulc7 LTER\cf3 \ulc3  
+\f0\b \cf2 \ulc2 TABLE
+\f1\b0 \cf3 \ulc3  \cf8 \ulc8 `anal\cf7 \ulc7 ysis
+\f0\b \cf4 \ulc4 `
+\f1\b0 \cf0 \ulnone \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 \ul \ulc2 ADD
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 FOREIGN
+\f1\b0 \cf3 \ulc3  KEY(\cf9 \ulc9 `strai\cf7 \ulc7 n_id
+\f0\b \cf4 \ulc4 `
+\f1\b0 \cf3 \ulc3 ) 
+\f0\b \cf2 \ulc2 REFERENCES
+\f1\b0 \cf3 \ulc3  \cf8 \ulc8 `st\cf7 \ulc7 rain\cf3 \ulc3 `(\cf9 \ulc9 `strai\cf7 \ulc7 n_id
+\f0\b \cf4 \ulc4 `
+\f1\b0 \cf3 \ulc3 )\cf0 \ulnone \
+
+\f0\b \cf2 \ul \ulc2 ON
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 UPDATE
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 NO
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 ACTION
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 ON
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 DELETE
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 NO
+\f1\b0 \cf3 \ulc3  
+\f0\b \cf2 \ulc2 ACTION
+\f1\b0 \cf6 \ulc6 ;\cf0 \ulnone \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  \cf8 `analysis`\cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (\cf9 `life_stage_id`\cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  \cf8 `lifestage`\cf3 (\cf9 `life_stage_id`\cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  \cf8 `analysis`\cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (\cf9 `parameter_stable_id`\cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  \cf8 `parameter`\cf3 (\cf9 `paramater_id`\cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  \cf8 `analysis`\cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (\cf9 `allele_symbol`\cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  \cf8 `allele`\cf3 (\cf9 `allele_symbol`\cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  \cf8 `allele`\cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (\cf9 `gene_accession_id`\cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  \cf8 `mouse_gene`\cf3 (\cf9 `gene_accession_id`\cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `analysis`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `mouse_gene`
+\f1\b0 \cf3 (
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `human_gene`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `mouse_gene`
+\f1\b0 \cf3 (
+\f0\b \cf4 `gene_accession_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `analysis_lacz`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `tissue_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `tissue`
+\f1\b0 \cf3 (
+\f0\b \cf4 `tissue_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `analysis_lacz`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `expression_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `expression`
+\f1\b0 \cf3 (
+\f0\b \cf4 `expression_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `analysis_lacz`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `analysis_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `analysis`
+\f1\b0 \cf3 (
+\f0\b \cf4 `analysis_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `gene_disease`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `human_gene`
+\f1\b0 \cf3 (
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `gene_disease`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `DOID`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `disease`
+\f1\b0 \cf3 (
+\f0\b \cf4 `DO_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `disease_genotype`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `gene_disease`
+\f1\b0 \cf3 (
+\f0\b \cf4 `HGNC_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `disease_genotype`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `DO_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `gene_disease`
+\f1\b0 \cf3 (
+\f0\b \cf4 `DOID`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `procedure_parameter`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `parameter_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `parameter`
+\f1\b0 \cf3 (
+\f0\b \cf4 `paramater_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `procedure_parameter`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `procedure_id`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `procedure`
+\f1\b0 \cf3 (
+\f0\b \cf4 `procedure_id`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;\cf0 \
+
+\f0\b \cf2 ALTER
+\f1\b0 \cf3  
+\f0\b \cf2 TABLE
+\f1\b0 \cf3  
+\f0\b \cf4 `gene_ontology`
+\f1\b0 \cf0 \
+
+\f0\b \cf2 ADD
+\f1\b0 \cf3  
+\f0\b \cf2 FOREIGN
+\f1\b0 \cf3  
+\f0\b \cf2 KEY
+\f1\b0 \cf3 (
+\f0\b \cf4 `gene_symbol`
+\f1\b0 \cf3 ) 
+\f0\b \cf2 REFERENCES
+\f1\b0 \cf3  
+\f0\b \cf4 `mouse_gene`
+\f1\b0 \cf3 (
+\f0\b \cf4 `gene_symbol`
+\f1\b0 \cf3 )\cf0 \
+
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 UPDATE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf3  
+\f0\b \cf2 ON
+\f1\b0 \cf3  
+\f0\b \cf2 DELETE
+\f1\b0 \cf3  
+\f0\b \cf2 NO
+\f1\b0 \cf3  
+\f0\b \cf2 ACTION
+\f1\b0 \cf6 ;}
